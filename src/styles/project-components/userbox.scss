@@ -1,0 +1,119 @@
+.userbox {
+  display: flex;
+  font-size: 0.9rem;
+}
+
+.userbox-modal {
+  .modal-dialog {
+    max-width: 416px;
+    margin: 2.4rem 8rem 0 0;
+    float: right;
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+  }
+
+  .userbox-buttons {
+    justify-content: space-between;
+    margin: 1.7rem 0 1.3rem 0;
+
+    a {
+      max-height: 40px;
+      width: 48%;
+      padding: 11px 30px;
+    }
+  }
+
+  .list-group {
+    background: #f7f8fa;
+    margin-right: -$modal-inner-padding-x;
+    margin-left: -$modal-inner-padding-x;
+    margin-bottom: -$modal-inner-padding-y;
+    padding-bottom: $modal-inner-padding-y;
+  }
+
+  .list-group-item {
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: flex;
+
+    &:hover {
+      background: #dbdcdd;
+    }
+
+    &.active a {
+      font-weight: 600;
+    }
+
+    a {
+      color: $base-grey;
+      padding: 0.75rem 2.5rem;
+      flex: 1 1 auto;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    &:first-child {
+      @include border-top-radius(0);
+    }
+
+  }
+
+  .close {
+    opacity: 1;
+
+    @include hover() {
+      color: $close-color;
+      text-decoration: none;
+    }
+
+    &:not(:disabled):not(.disabled) {
+      @include hover-focus() {
+        opacity: 1;
+        color: #000;
+      }
+    }
+  }
+}
+
+@media (max-width: $md-screen) {
+  .userbox-modal {
+    .modal-dialog {
+      width: 92%;
+      margin: 1rem 1rem 6rem 1rem;
+    }
+  }
+}
+
+@media (max-width: $sm-screen) {
+  .userbox-modal {
+    .userbox-buttons {
+      flex-direction: column;
+
+      a {
+        width: 100%;
+        margin: 1rem 1rem 1rem 0;
+      }
+    }
+
+    .modal-title {
+      font-size: 1.6rem;
+    }
+
+    .list-group {
+      margin-right: -1.8rem;
+      margin-left: -1.8rem;
+      margin-bottom: -1.4rem;
+      padding-bottom: 1.4rem;
+    }
+
+    .list-group-item a {
+      padding: 0.75rem 1.8rem;
+    }
+  }
+}
+

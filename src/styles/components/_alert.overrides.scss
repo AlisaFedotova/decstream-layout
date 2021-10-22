@@ -1,0 +1,31 @@
+.alert {
+  position: fixed;
+  top: 5px;
+  left: calc(50% - #{$alert-width} / 2);
+  color: white;
+  text-align: center;
+  max-width: $alert-width;
+  width: 100%;
+  min-height: 50px;
+  font-weight: 400;
+  z-index: 9999;
+
+  .close {
+    height: calc(#{$alert-height} - #{$alert-padding-y} * 2);
+    line-height: calc(#{$alert-height} - #{$alert-padding-y} * 2 - #{$alert-close-btn-size} / 2);
+    color: white;
+    text-shadow: none;
+    font-size: 21px;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: $md-screen) {
+  .alert {
+    left: auto;
+    max-width: inherit;
+    width: calc(100% - 20px);
+    margin: 0 10px;
+
+  }
+}

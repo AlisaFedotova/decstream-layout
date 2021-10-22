@@ -1,0 +1,49 @@
+.aside-menu {
+  list-style: none;
+  padding: 0;
+
+  li {
+    margin-bottom: .7rem;
+  }
+
+  a {
+    color: $base-grey;
+    padding: 16px 35px;
+    font-size: .9rem;
+    border-radius: $aside-menu-item-padding-x * 2;
+
+    &.active {
+      color: $base-pink;
+      font-weight: 700;
+      background: rgba($base-pink, 0.1);
+    }
+
+    &:hover {
+      text-decoration: none;
+      background: rgba($base-pink, 0.05);
+    }
+
+    &:focus {
+      outline: none;
+      background: rgba($base-pink, 0.1);
+    }
+  }
+
+  img {
+    width: 32px;
+    margin: -16px 0 -16px -16px;
+  }
+}
+
+.hamburger-menu {
+  .aside-menu-item {
+    width: calc(100% - 8px * 2);
+    margin: auto auto 0.25rem;
+  }
+}
+
+@media (max-width: $md-screen) {
+  aside {
+    display: none;
+  }
+}

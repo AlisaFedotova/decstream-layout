@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 283 200">
+  <defs>
+    <path id="vfyg534gab"
+          d="M8 0h58.634c4.142 0 8.181 1.286 11.56 3.68l13.611 9.64c3.38 2.394 7.42 3.68 11.56 3.68H235c4.418 0 8 3.582 8 8v147c0 4.418-3.582 8-8 8H8c-4.418 0-8-3.582-8-8V8c0-4.418 3.582-8 8-8z"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <use fill="#FFF" xlink:href="#vfyg534gab"/>
+  </g>
+</svg>

@@ -1,0 +1,33 @@
+$btn-close-color: #353738;
+
+.btn-close {
+  display: block;
+  position: relative;
+  width: 18px;
+  height: 18px;
+
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: -1px;
+    width: 4px;
+    height: 23px;
+    background: $btn-close-color;
+    transform-origin: top;
+    transform: rotate(-45deg);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    right: -1px;
+    width: 4px;
+    height: 23px;
+    background: $btn-close-color;
+    transform-origin: top;
+    transform: rotate(45deg);
+  }
+}

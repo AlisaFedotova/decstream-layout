@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Components</title>
+  <script src="../node_modules/bootstrap/js/src/collapse.js"></script>
+</head>
+<body style="padding: 5px">
+<div class="spinner-wrapper" id="page-spinner">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<script>
+  window.onload = function (){
+    let spinner = document.querySelector('#page-spinner');
+    spinner.style = 'display:none';
+  }
+</script>
+<div class="position-relative">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3 text-center">
+        <div class="col mb-1">
+          <button type="button" class="btn btn-primary">Primary</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-primary focus">Focused</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-primary active">Active</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-primary disabled">Disabled</button>
+        </div>
+
+      </div>
+      <div class="col-3 text-center">
+        <div class="col mb-1">
+          <button type="button" class="btn btn-secondary">Secondary</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-secondary focus">Focused</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-secondary active">Active</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-secondary disabled">Disabled</button>
+        </div>
+      </div>
+      <div class="col-3 text-center">
+        <div class="col">
+          <button type="button" class="btn btn-link">Link</button>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-link focus">Focused</button>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-link active">Active</button>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-link disabled">Disabled</button>
+        </div>
+      </div>
+      <div class="col-3 text-center">
+        <div class="col mb-1">
+          <button type="button" class="btn btn-danger">Danger</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-danger focus">Focused</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-danger active">Active</button>
+        </div>
+        <div class="col mb-1">
+          <button type="button" class="btn btn-danger disabled">Disabled</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-7 mt-2 mb-2">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn">Left</button>
+          <button type="button" class="btn"><span>Middle</span><br/><span>left</span></button>
+          <button type="button" class="btn active"><span>Middle</span><br/><span>right</span></button>
+          <button type="button" class="btn">Right</button>
+        </div>
+      </div>
+      <div class="col-2 mt-2 mb-2">
+        <button type="button" class="btn btn-primary btn-round">?</button>
+
+      </div>
+      <div class="col-3 mt-2 mb-2">
+        <button type="button" class="btn btn-primary">
+          <span>Text</span>
+          <span>with addition</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3">
+        <div class="col">
+          <div class="form-group mb-3">
+            <label for="authEmailInput1">Email</label>
+            <input type="email" class="form-control" id="authEmailInput1" name="email" value="user@user.ru" validate=""
+                   data-validator="email">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group mb-3">
+            <label for="authEmailInput">Email</label>
+            <input disabled type="email" class="form-control" id="authEmailInput" name="email" value="user@user.ru"
+                   validate="" data-validator="email">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group mb-3">
+            <label for="basic-url4">Label</label>
+            <input type="text" class="form-control error" id="basic-url4" aria-describedby="basic-addon3" value="Text">
+            <small id="regLastNameHelp" class="form-text text-muted">
+              Поле может содержать только кириллические символы
+            </small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group label-side mb-3">
+            <label for="authEmailInput4">side</label>
+            <input type="email" class="form-control" id="authEmailInput4" name="email" value="user@user.ru" validate=""
+                   data-validator="email">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group label-side label-top-mobile mb-3">
+            <label for="authEmailInput5">to top</label>
+            <input type="email" class="form-control" id="authEmailInput5" name="email" value="user@user.ru" validate=""
+                   data-validator="email">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <input type="date" id="toInput" name="to"
+                   class="form-control date-picker" value="01.08.2021"
+                   placeholder="01.08.2021">
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="group-card">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitch3">
+              <label class="custom-control-label" for="customSwitch3">Снять с охраны</label>
+            </div>
+            <a class="stretched-link group-card-description" href="./?/?group=4176">
+              <div class="card-name">23121323</div>
+              <div class="card-subtitle">N устройств</div>
+            </a>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="group-card">
+            <a class="stretched-link group-card-description" href="./?/?group=4176">
+              <div class="card-name">loooooooooooooooooooooooooooooooooong</div>
+            </a>
+          </div>
+        </div>
+        <div class="col">
+          <div class="meter-card data-state data-state-MISSING">
+            <a class="stretched-link" href="./?/?group=4176">
+              <img title="Водосчетчик" class="meter-card-type"
+                   src="./decstream_cp/public/images/icons/devices/WATER_COUNTER.svg">
+              <div class="meter-card-name">
+                <span class="card-title">Вега СИ-12 514</span>
+                <span class="card-subtitle">Водосчётчик</span>
+              </div>
+              <div class="meter-card-value">
+                <span>301,49 м³</span>
+                <span>Показания</span>
+              </div>
+              <div class="meter-card-consumption">
+                <span>100,05 м³</span>
+                <span>Расход за месяц</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="col">
+          <div class="alert alert-primary" role="alert" style="position: static">
+            <span>alert-primary</span>
+            <button type="button" class="close" data-dismiss="alert">×</button>
+          </div>
+          <div class="alert alert-secondary" role="alert" style="position: static">
+            <span>alert-secondary</span>
+            <button type="button" class="close" data-dismiss="alert">×</button>
+          </div>
+          <div class="alert alert-success" role="alert" style="position: static">
+            <span>alert-success</span>
+            <button type="button" class="close" data-dismiss="alert">×</button>
+          </div>
+          <div class="alert alert-danger" role="alert" style="position: static">
+            <span>alert-danger</span>
+            <button type="button" class="close" data-dismiss="alert">×</button>
+          </div>
+          <div class="alert alert-warning" role="alert" style="position: static">
+            <span>alert-warning</span>
+            <button type="button" class="close" data-dismiss="alert">×</button>
+          </div>
+          <div class="alert alert-info" role="alert" style="position: static">
+            <span>alert-info</span>
+            <button type="button" class="close" data-dismiss="alert">×</button>
+          </div>
+        </div>
+        <div class="col">
+          <div class="ticket" onclick="editInvite('nik+ds@very-soft.com', 10, 'MANAGER');"
+               style="cursor: pointer; width: 327px">
+            <div class="ticket-body">
+              <span class="ticket-title">nik+ds@very-soft.com</span>
+              <div class="ticket-item">
+                <span class="ticket-item-title">Устарело</span>
+                <span class="ticket-item-subtitle">СТАТУС</span>
+              </div>
+              <div class="ticket-item">
+                <span class="ticket-item-title">28-11-2019 19:06:46</span>
+                <span class="ticket-item-subtitle">Выдано</span>
+              </div>
+              <div class="ticket-item">
+                <span class="ticket-item-title">Менеджер</span>
+                <span class="ticket-item-subtitle">Роль</span>
+              </div>
+            </div>
+            <div class="ticket-transition">
+              >
+            </div>
+          </div>
+          <div class="ticket" onclick="editInvite('nik+ds@very-soft.com', 10, 'MANAGER');"
+               style="cursor: pointer; width: 327px">
+            <div class="ticket-body">
+              <span class="ticket-title">nik+ds@very-soft.com</span>
+              <div class="ticket-item">
+                <span class="ticket-item-title">Устарело</span>
+                <span class="ticket-item-subtitle">Статус</span>
+              </div>
+              <div class="ticket-item">
+                <span class="ticket-item-title">28-11-2019 19:06:46</span>
+                <span class="ticket-item-subtitle">Выдано</span>
+              </div>
+              <div class="ticket-item">
+                <span class="ticket-item-title">Менеджер</span>
+                <span class="ticket-item-subtitle">Роль</span>
+              </div>
+            </div>
+            <div class="ticket-transition">
+              >
+            </div>
+          </div>
+          <div class="ticket triangle_exclamation" onclick="location.href='./?/organization/groups/?group=4176'"
+               style="cursor:pointer;">
+            <div class="ticket-body">
+              <div class="ticket-title-block">
+                <img class="deviceIcon" src="./decstream_cp/public/images/icons/folder.svg">
+                <span class="ticket-title">23121323</span>
+              </div>
+            </div>
+            <div class="ticket-transition">
+              <img src="./decstream_cp/public/images/arrow-forth.svg">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-3">
+        <div class="col">
+          <ul class="aside-menu container-fluid" id="homeSubmenu2">
+            <li>
+              <a href="./?/" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/jkh.svg">
+                ЖКХ
+              </a>
+            </li>
+            <li>
+              <a href="./?/organization/groups" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/devices.svg">
+                Список устройств
+              </a>
+            </li>
+            <li>
+              <a href="./?/events/" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/events.svg">
+                Журнал событий
+              </a>
+            </li>
+            <li>
+              <a href="./?/reports/" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/reports.svg">
+                Отчеты
+              </a>
+            </li>
+            <li>
+              <a href="./?/members/" class="w-100 d-block active">
+                <img src="./decstream_cp/public/images/menuIcons/users_active.svg">
+                Пользователи и роли
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="col">
+          <div class="form-group">
+            <select class="form-control active" name="inviteRole">
+              <option value="SPECTATOR">Наблюдатель</option>
+              <option value="USER">Пользователь</option>
+              <option value="MANAGER">Менеджер</option>
+              <option value="OWNER">Владелец</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <select class="form-control" disabled name="inviteRole">
+              <option value="SPECTATOR">Наблюдатель</option>
+              <option value="USER">Пользователь</option>
+              <option value="MANAGER">Менеджер</option>
+              <option value="OWNER">Владелец</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1">
+            <label class="custom-control-label" for="customSwitch1">Снять с охраны</label>
+          </div>
+        </div>
+        <div class="col mt-3">
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" id="inlineCheckbox1" value="option1">
+            <label class="custom-control-label" for="inlineCheckbox1">Checkbox</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" id="inlineCheckbox2" value="option1" checked>
+            <label class="custom-control-label" for="inlineCheckbox2">Checkbox</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" id="inlineCheckbox3" value="option1" disabled>
+            <label class="custom-control-label" for="inlineCheckbox3">Disabled</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" id="inlineCheckbox4" value="option1" checked disabled>
+            <label class="custom-control-label" for="inlineCheckbox4">Disabled</label>
+          </div>
+        </div>
+        <div class="col mt-3">
+          <div class="btn btn-tag">
+            <span>Фильтр 1</span>
+          </div>
+          <div class="btn btn-tag">
+            <span>Фильтр 2</span>
+          </div>
+        </div>
+        <div class="col mt-3">
+          <nav class="pagination-nav" style="position: static">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">←</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item active"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">→</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col mt-3">
+          <button type="button" class="btn btn-primary" data-dismiss="alert" aria-label="Close"
+                  onclick="showAlert('info','alert text')">
+            <span aria-hidden="true">Show alert</span>
+          </button>
+          <script>
+            function showAlert(type, text) {
+              let alert = buildAlert(type, text);
+              let body = document.body;
+              body.appendChild(alert);
+              console.log(alert);
+            }
+
+            function buildAlert(type, text) {
+              let alertContainer = document.createElement('div')
+              alertContainer.className = 'alert alert-' + type + ' fade show';
+              alertContainer.role = 'alert'
+              alertContainer.id = type + 'Alert';
+              let alertMess = document.createElement('span');
+              alertMess.innerText = text;
+              alertContainer.appendChild(alertMess);
+              let alertClose = document.createElement('button');
+              alertClose.className = 'close';
+              alertClose.type = 'button';
+              alertClose.innerText = '×';
+              alertContainer.appendChild(alertClose);
+              return alertContainer;
+            }
+
+
+          </script>
+        </div>
+        <div class="col mt-3">
+          <div class="ticket-set">
+            <div class="ticket" style=";position:relative;">
+              <div class="ticket-body" style="gap: 8px;">
+                <span class="ticket-title">10.16.76.2, Firefox (unknown)</span>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">Личный кабинет</span>
+                </div>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">24-09-2021</span>
+                </div>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">14:39:38</span>
+                </div>
+              </div>
+              <button class="ticket-btn" onclick="deleteSession('96dde37a-8ebd-48fe-b454-fd2f65ba0242')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <g fill="none" fill-rule="evenodd">
+                    <path d="M0 0L24 0 24 24 0 24z"
+                          transform="translate(-1344 -317) translate(348 308) translate(996 9)"></path>
+                    <path fill="#C94E60" fill-rule="nonzero"
+                          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                          transform="translate(-1344 -317) translate(348 308) translate(996 9)"></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
+            <div class="ticket" style=";position:relative;">
+              <div class="ticket-body" style="gap: 8px;">
+                <span class="ticket-title">10.16.76.2, Firefox (unknown)</span>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">Личный кабинет</span>
+                </div>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">24-09-2021</span>
+                </div>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">14:39:38</span>
+                </div>
+              </div>
+              <button class="ticket-btn" onclick="deleteSession('96dde37a-8ebd-48fe-b454-fd2f65ba0242')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <g fill="none" fill-rule="evenodd">
+                    <path d="M0 0L24 0 24 24 0 24z"
+                          transform="translate(-1344 -317) translate(348 308) translate(996 9)"></path>
+                    <path fill="#C94E60" fill-rule="nonzero"
+                          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                          transform="translate(-1344 -317) translate(348 308) translate(996 9)"></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
+            <div class="ticket" style=";position:relative;">
+              <div class="ticket-body" style="gap: 8px;">
+                <span class="ticket-title">10.16.76.2, Firefox (unknown)</span>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">Личный кабинет</span>
+                </div>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">24-09-2021</span>
+                </div>
+                <div class="ticket-item w-100">
+                  <span class="ticket-item-title">14:39:38</span>
+                </div>
+              </div>
+              <button class="ticket-btn" onclick="deleteSession('96dde37a-8ebd-48fe-b454-fd2f65ba0242')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <g fill="none" fill-rule="evenodd">
+                    <path d="M0 0L24 0 24 24 0 24z"
+                          transform="translate(-1344 -317) translate(348 308) translate(996 9)"></path>
+                    <path fill="#C94E60" fill-rule="nonzero"
+                          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                          transform="translate(-1344 -317) translate(348 308) translate(996 9)"></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="table-responsive table-cover">
+          <table class="table table-list">
+            <thead>
+            <tr>
+              <th class="border-0">Имя</th>
+              <th class="border-0">Статус</th>
+              <th class="border-0">Выдано</th>
+              <th class="border-0">Роль</th>
+              <th class="border-0"></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr onclick="editInvite('abcabcabc+5@gmail.com', 233, 'MANAGER');" style="cursor:pointer;">
+              <td class="usermobtable1 nowrap">abcabcabc+5@gmail.com</td>
+              <td class="usermobtable2">Устарело</td>
+              <td class="usermobtable3">14-12-2020 15:11:13</td>
+              <td class="usermobtable2">Менеджер</td>
+              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
+            </tr>
+            <tr onclick="editInvite('abcabcabc+6@gmail.com', 234, 'MANAGER');" style="cursor:pointer;">
+              <td class="usermobtable1 nowrap"><div class="td-fixwidth">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc+6@gmail.com</div></td>
+              <td class="usermobtable2">Устарело</td>
+              <td class="usermobtable3">14-12-2020 15:16:11</td>
+              <td class="usermobtable2">Менеджер</td>
+              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
+            </tr>
+            <tr onclick="editInvite('abcabcabc+4@gmail.com', 232, 'MANAGER');" style="cursor:pointer;">
+              <td class="usermobtable1 nowrap">abcabcabc+4@gmail.com</td>
+              <td class="usermobtable2">Устарело</td>
+              <td class="usermobtable3">14-12-2020 15:01:32</td>
+              <td class="usermobtable2">Менеджер</td>
+              <td class="pl-0 hover-only">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <g fill="none" fill-rule="evenodd">
+                      <path d="M0 0L24 0 24 24 0 24z"
+                            transform="translate(-1344 -317) translate(348 308) translate(996 9)"/>
+                      <path fill="#C94E60" fill-rule="nonzero"
+                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                            transform="translate(-1344 -317) translate(348 308) translate(996 9)"/>
+                    </g>
+                  </svg>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <div class="table-responsive table-cover">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Ключ</th>
+              <th>Значение</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Фамилия</td>
+              <td>Тест</td>
+            </tr>
+            <tr>
+              <td>Имя</td>
+              <td>name</td>
+            </tr>
+            <tr>
+              <td>Отчество</td>
+              <td>Верисофтович</td>
+            </tr>
+            <tr>
+              <td>E-mail</td>
+              <td>dectest01@very-soft.com</td>
+            </tr>
+            <tr>
+              <td>Назначенная роль</td>
+              <td>Владелец</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="width:500px">
+          <!--        <div class="collapse-group mb-4">-->
+          <!--          <div class="collapse-level">-->
+          <!--            <button class="node collapsed" type="button" data-toggle="collapse" data-target="#multiCollapseExample1"-->
+          <!--                    aria-expanded="false" aria-controls="multiCollapseExample1">-->
+          <!--              <span>Группа 1</span>-->
+          <!--            </button>-->
+          <!--            <div class="collapse-level collapse" id="multiCollapseExample1">-->
+          <!--              <button class="node collapsed" type="button" data-toggle="collapse" data-target=""-->
+          <!--                      aria-expanded="false" aria-controls="">-->
+          <!--                <span>Группа 2-1</span>-->
+          <!--              </button>-->
+          <!--              <button class="node collapsed" type="button" data-toggle="collapse" data-target="#multiCollapseExample3"-->
+          <!--                      aria-expanded="false" aria-controls="multiCollapseExample3">-->
+          <!--                <span>Группа 2-2</span>-->
+          <!--              </button>-->
+          <!--              <div class="collapse-level collapse" id="multiCollapseExample3">-->
+          <!--                <button class="node collapsed" type="button" data-toggle="collapse" data-target="#multiCollapseExample5"-->
+          <!--                        aria-expanded="false" aria-controls="multiCollapseExample5">-->
+          <!--                  <span>Группа 3-1</span>-->
+          <!--                </button>-->
+          <!--                <button class="node collapsed selected" type="button" data-toggle="collapse" data-target="#multiCollapseExample5"-->
+          <!--                        aria-expanded="false" aria-controls="multiCollapseExample5">-->
+          <!--                  <span>Группа 3-2</span>-->
+          <!--                </button>-->
+          <!--                <button class="node collapsed" type="button" data-toggle="collapse" data-target="#multiCollapseExample5"-->
+          <!--                        aria-expanded="false" aria-controls="multiCollapseExample5">-->
+          <!--                  <span>Группа 3-3</span>-->
+          <!--                </button>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--        </div>-->
+          <div id="groupParentsTree">
+          </div>
+          <script>
+            let _parentsArray = {
+              "address": {
+                "area": null,
+                "country": null,
+                "house": null,
+                "locality": null,
+                "office": null,
+                "parent_level": -1,
+                "pavilion": null,
+                "region": null,
+                "street": null,
+                "town": null
+              },
+              "id": 10,
+              "name": "группа",
+              "parent_id": null,
+              "root": true,
+              "title": "группа",
+              "value": 10,
+              "child": [
+                {
+                  "id": 4768,
+                  "name": "123",
+                  "address": {
+                    "parent_level": -1
+                  },
+                  "parent_id": 10,
+                  "title": "123",
+                  "value": 4768,
+                  "child": [
+                    {
+                      "id": 4769,
+                      "name": "1234",
+                      "address": {
+                        "parent_level": -1
+                      },
+                      "parent_id": 4768,
+                      "title": "1234",
+                      "value": 4769,
+                      "child": [
+                        {
+                          "id": 4781,
+                          "name": "test",
+                          "address": {
+                            "parent_level": -1
+                          },
+                          "parent_id": 4769,
+                          "selected": true,
+                          "title": "test",
+                          "value": 4781,
+                          "child": []
+                        },
+                        {
+                          "address": {
+                            "area": null,
+                            "country": null,
+                            "house": null,
+                            "locality": null,
+                            "office": null,
+                            "parent_level": -1,
+                            "pavilion": null,
+                            "region": null,
+                            "street": null,
+                            "town": null
+                          },
+                          "id": 4785,
+                          "name": "test 1",
+                          "parent_id": 4769,
+                          "title": "test 1",
+                          "value": 4785,
+                          "child": []
+                        }
+                      ],
+                      "hasChild": true
+                    }
+                  ],
+                  "hasChild": true
+                },
+                {
+                  "address": {
+                    "area": null,
+                    "country": null,
+                    "house": null,
+                    "locality": null,
+                    "office": null,
+                    "parent_level": -1,
+                    "pavilion": null,
+                    "region": null,
+                    "street": null,
+                    "town": null
+                  },
+                  "id": 4176,
+                  "name": "23121323",
+                  "parent_id": 10,
+                  "title": "23121323",
+                  "value": 4176,
+                  "child": []
+                },
+                {
+                  "address": {
+                    "area": null,
+                    "country": null,
+                    "house": null,
+                    "locality": null,
+                    "office": null,
+                    "parent_level": -1,
+                    "pavilion": null,
+                    "region": null,
+                    "street": null,
+                    "town": null
+                  },
+                  "id": 3646,
+                  "name": "Группа N",
+                  "parent_id": 10,
+                  "title": "Группа N",
+                  "value": 3646,
+                  "child": []
+                },
+                {
+                  "address": {
+                    "area": null,
+                    "country": null,
+                    "house": null,
+                    "locality": null,
+                    "office": null,
+                    "parent_level": -1,
+                    "pavilion": null,
+                    "region": null,
+                    "street": null,
+                    "town": null
+                  },
+                  "id": 3966,
+                  "name": "gfd",
+                  "parent_id": 10,
+                  "title": "gfd",
+                  "value": 3966,
+                  "child": []
+                }
+              ],
+              "hasChild": true
+            }
+
+            let root = document.querySelector('#groupParentsTree');
+
+            console.log(_parentsArray);
+            let group = document.createElement('div');
+            group.className = 'collapse-group';
+            group.id = 'collapse-group';
+            group.appendChild(buildTree(_parentsArray), '');
+            root.appendChild(group);
+            addFormat();
+
+            function addFormat() {
+              let group = document.querySelector('#collapse-group');
+              let level = group.querySelectorAll('.collapse-level');
+              let node;
+              for (let i = 0; i < level.length; i++) {
+                node = level[i].querySelectorAll('.node');
+                for (let j = 0; j < node.length; j++) {
+                  node[j].style = 'padding-left: calc(10px * ' + i + ')';
+                }
+              }
+            }
+
+            function buildTree(arr, parentId) {
+              let child = arr.child;
+              let name = arr.name;
+              let isRoot = arr.root;
+              let hasChild = arr.hasChild;
+              let id = arr.id;
+              let closeElemId = '';
+              if (parentId) {
+                closeElemId = 'child-' + parentId;
+              }
+              let levelElem = document.createElement('div');
+              levelElem.className = 'collapse-level';
+              levelElem.id = closeElemId;
+              levelElem.appendChild(buildElement(name, isRoot, hasChild, id));
+              for (let i = 0; i < child.length; i++) {
+                levelElem.appendChild(buildTree(child[i], id));
+              }
+              return levelElem;
+            }
+
+            function buildElement(name, isRoot, hasChild, id) {
+              if (hasChild) {
+                return buildNode(name, isRoot, id);
+              }
+              return buildLeaf(name, isRoot);
+            }
+
+            function buildNode(name, isRoot, id) {
+              let button = document.createElement('button');
+              button.setAttribute('class', isRoot ? 'node' : 'node');
+              button.setAttribute('type', 'button');
+              button.setAttribute('data-toggle', 'collapse');
+              button.setAttribute('data-target', '#' + 'child-' + id);
+              button.setAttribute('aria-expanded', 'false');
+              button.setAttribute('aria-controls', 'child-' + id);
+              let text = document.createElement('span');
+              text.innerText = name;
+              button.appendChild(text);
+              return button;
+            }
+
+            function buildLeaf(name, isRoot) {
+              let button = document.createElement('button');
+              button.setAttribute('class', isRoot ? 'node' : 'node collapsed');
+              button.setAttribute('type', 'button');
+              button.setAttribute('data-toggle', 'collapse');
+              button.setAttribute('aria-expanded', 'false');
+              let text = document.createElement('span');
+              text.innerText = name;
+              button.appendChild(text);
+              return button;
+            }
+          </script>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="modal userbox-modal fade show" id="organizationsInfo" tabindex="-1" role="dialog"
+             aria-labelledby="organizationInfoLabel" aria-modal="true" style="padding-right: 14px; display: block;
+           opacity: 1; position:static;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">Информация об аккаунте</h2>
+                <button type="button" class="close mobile-only" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="btn-close"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div>
+                  <p>User Test Superr</p>
+                  <a href="./?/profile/actions/">user@user.ru</a>
+                </div>
+                <div class="d-flex userbox-buttons">
+                  <a role="button" href="./?/profile/" class="btn btn-primary btn-custom w-text-uppercase">ИЗМЕНИТЬ</a>
+                  <a role="button" href="./?/logout" class="btn btn-secondary btn-custom rounded-pill text-uppercase">ВЫЙТИ</a>
+                </div>
+                <ul class="list-group">
+                  <li class="list-group-item "><a href="./?/?organization=10">
+
+                    User T. S.
+
+                  </a>
+                  </li>
+                  <li class="list-group-item "><a href="./?/?organization=3">
+
+                    Хорошая
+
+                  </a>
+                  </li>
+                  <li class="list-group-item active"><a href="./?/?organization=8">
+                    <b>
+                      УК
+                    </b>
+                  </a>
+                  </li>
+                  <li class="list-group-item "><a href="./?/?organization=310">
+
+                    Томика23
+
+                  </a>
+                  </li>
+                  <li class="list-group-item "><a href="./?/?organization=1184">
+
+                    Тест 404 не трогать
+
+                  </a>
+                  </li>
+                  <li class="list-group-item "><a href="./?/?organization=261">
+
+                    ООО "Декстрим компани"
+
+                  </a>
+                  </li>
+                  <li class="list-group-item "><a href="./?/?organization=262">
+
+                    &lt;i&gt;Водосчетчик&lt;/i&gt;&lt;img src="картинка"/&gt;
+
+                  </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="table-responsive table-cover">
+          <table class="table table-list with-icons">
+            <thead>
+            <tr>
+              <th>Тип</th>
+              <th>Оборудование</th>
+              <th>Функция</th>
+              <th>Обновление</th>
+              <th></th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-role="link" data-href="./?/organization/groups/?group=4176" class="bg-warning"
+                style="cursor: pointer;">
+              <td class="pr-0">
+                <img class="deviceIcon" src="/src/images/folder.svg">
+              </td>
+              <td class="pl-0">23121323</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
+            </tr>
+            <tr data-role="link" data-href="./?/organization/groups/?group=4177" class="" style="cursor: pointer;">
+              <td class="pr-0">
+                <img class="deviceIcon" src="src/images/folder.svg">
+              </td>
+              <td class="pl-0">22323a</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
+            </tr>
+            <tr data-role="link" data-href="./?/devices/info/?id=625" style="cursor: pointer;">
+              <td>
+                <span class="mask2line bg-success"></span>
+                <span>
+            	                        <img class="deviceIcon"
+                                           src="src/images/bulb.svg">
+
+            	                    </span>
+              </td>
+              <td>Водосчётчик (Вега СИ-12 6)</td>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
+            </tr>
+            <tr data-role="link" data-href="./?/devices/info/?id=1003" style="cursor: pointer;">
+              <td>
+                <span class="mask2line bg-success"></span>
+                <span>
+            	                        <img class="deviceIcon"
+                                           src="src/images/bulb.svg">
+
+            	                    </span>
+              </td>
+              <td>Влажность (Дебаг) 1</td>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <div class="modal fade" id="addOrgModal" tabindex="-1" role="dialog"
+             aria-hidden="true" style="display: block;opacity: 1;position: static;">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title">ДОБАВЛЕНИЕ ОРГАНИЗАЦИИ</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="btn-close"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Введите название организации</p>
+                <div class="form-group">
+                  <label for="addOrgId">Название организации</label>
+                  <input type="text" id="addOrgId" class="form-control" value="">
+                </div>
+                <div class="form-group">
+                  <select class="form-control" id="addVirtualDevicePurposeSelect">
+                    <option value="NONE">Не задано</option>
+                    <option value="COLD_WATER">Холодная вода</option>
+                    <option value="HOT_WATER">Горячая вода</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary w-100 mb-4">
+                  Устройство
+                </button>
+                <button class="btn btn-primary w-100 mb-4">
+                  <span>Прибор учёта</span>
+                  <span>с импульсным выходом</span>
+                </button>
+                <div class="row mt-sm-4 btn-line">
+                  <div class="col-sm-6">
+                    <button class="btn btn-secondary btn-block">
+                      Назад
+                    </button>
+                  </div>
+                  <div class="col-sm-6">
+                    <button class="btn btn-primary btn-block">
+                      Далее
+                    </button>
+                  </div>
+                </div>
+                <button class="btn btn-primary w-100 mt-40">
+                  ДОБАВИТЬ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="modal fade" id="addOrgModal1" tabindex="-1" role="dialog"
+             aria-hidden="true" style="display: block;opacity: 1;position: static;">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="spinner-overlay" style="z-index: 10;">
+                <div class="spinner" style="font-size: 56px;text-align: center;line-height: 30px;">c</div>
+              </div>
+              <div class="modal-header">
+                <h2 class="modal-title">ДОБАВЛЕНИЕ ОРГАНИЗАЦИИ</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="btn-close"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <button class="btn btn-primary w-100 mb-4">
+                  Устройство
+                </button>
+                <button class="btn btn-primary w-100 mb-4" onclick="console.log('click')">
+                  <span>Прибор учёта</span>
+                  <span>с импульсным выходом</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3"></div>
+    </div>
+  </div>
+  <form class="primary-block row">
+    <div class="row col-12 col-md-6">
+      <div class="form-group col-6 pr-2 pr-md-3">
+        <label class="md-and-lower" for="fromInput">с</label>
+        <input type="date" id="fromInput" onchange="formUpdate(this.id)" name="from" class="form-control date-picker"
+               value="13.08.2021" placeholder="13.08.2021">
+      </div>
+      <div class="md-and-higher" style="line-height: 40px; margin: 0 -10px 0;">-</div>
+      <div class="form-group mb-3 col-6 pl-2 pl-md-3">
+        <label class="md-and-lower" for="toInput1">по</label>
+        <input type="date" id="toInput1" onchange="formUpdate(this.id)" name="to" class="form-control date-picker"
+               value="12.09.2021" placeholder="дд-мм-гггг">
+      </div>
+    </div>
+    <div class="row col-12 col-md-6">
+      <div class="form-group label-side label-top-mobile col-6 pr-2 pr-md-3">
+        <label for="stepInput">Шаг</label>
+        <select class="form-control" name="inviteRole" id="stepInput" onchange="formUpdate(this.id)">
+          <option value="YEAR">Год
+          </option>
+          <option value="MONTH">
+            Месяц
+          </option>
+          <option value="WEEK">
+            Неделя
+          </option>
+          <option value="DAY" selected="">День
+          </option>
+          <option value="HOUR">Час
+          </option>
+        </select>
+      </div>
+      <div class="form-group label-side label-top-mobile mb-3 col-6 pl-2 pl-md-3">
+        <label for="typeChange">Вид</label>
+        <select class="form-control" id="typeChange" name="typeChange" onchange="formUpdate(this.id)">
+          <option value="value" selected="">Значения</option>
+          <option value="delta">Разница</option>
+        </select>
+      </div>
+    </div>
+  </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+.pagination-nav {
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+  left: 0;
+}
+
+.pagination {
+  margin-bottom: 0;
+  justify-content: center;
+}
+
+.page-item {
+  margin: 0 3px;
+
+  .page-link {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 23px;
+
+    &:first-child, &:last-child {
+      border-radius: 50%;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "build-host"  : "w1",
+  "host"  : "w1",
+  "giveaway" : {
+    "source"   : "/home/jenkins/w1.37.yourgamblingsystem",
+    "apphome"  : "/www/yourgamblingsystem_37",
+    "buildout" : "/var/tmp/altair/yourgamblingsystem_37",
+    "target" : "/var/tmp/altair/yourgamblingsystem_37/build-info",
+    "target_final" : "/www/yourgamblingsystem_37"
+  },
+  "java" : {
+    "vm" : "",
+    "home" : "",
+    "version" : ""
+  },
+  "sm" : {
+    "branch" : "",
+    "revision" : "",
+    "version"  : ""
+  },
+  "postgresql" : { "version" : "not implemented" },
+  "altair_url": "altair://rw1l.yourgamblingsystem.37.w1.connectivegames.com:8087",
+  "iid": "yourgamblingsystem_37",
+  "iext"  : "",
+  "instance_ext"  : "",
+  "vendor": "yourgamblingsystem",
+  "branch": "37",
+  "revision": "132395",
+  "revdate" : "2021-03-12T04:28:27.345519Z",
+  "revision_date" : "2021-03-12T04:28:27.345519Z",
+  "commit_revision": "132298",
+  "build_date": "2021-03-16T07:54:23,937079821+00:00",
+  "testMode": "1",
+  "productionMode": "0",
+  "build_settings": {
+     "TEST_MODE" : "true",
+     "PRODUCTION_MODE" : "false",
+     "REGRESSION_TEST" : "false"
+   },
+  "faces"   : ["ygs","ygs2"],
+
+  "clients": []
+}

@@ -1,0 +1,38 @@
+.spinner-overlay {
+  height: calc(100vh - #{$header-height});
+  width: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.spinner {
+  margin: 0 auto;
+  height: 40px;
+  width: 40px;
+  animation: rotate 0.7s infinite linear;
+}
+
+.modal {
+  .spinner-overlay {
+    background: rgba(255, 255, 255, 0.9);
+    height: 100%;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: $md-screen) {
+  .spinner-overlay {
+    height: calc(100vh - #{$header-height-md});
+  }
+}

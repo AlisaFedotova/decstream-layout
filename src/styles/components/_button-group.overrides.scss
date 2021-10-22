@@ -1,0 +1,73 @@
+.btn-group {
+  .btn {
+    @include button-variant(#fff, transparent, rgb(229 231 234), transparent, rgb(229 231 234), transparent);
+    color: $base-grey;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    text-transform: lowercase;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+
+    &:first-letter {
+      text-transform: capitalize;
+    }
+
+    &:focus, &.focus {
+      color: $base-grey;
+      background-color: $btn-secondary-focus;
+    }
+
+    &.disabled, &:disabled {
+      background: $btn-secondary-disabled;
+      opacity: 1;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active,
+    .show > &.dropdown-toggle {
+      color: $base-grey;
+    }
+
+    &:hover {
+      color: $base-grey;
+    }
+
+    &.active {
+      @include button-variant(#353738, transparent, $btn-primary-hover, transparent, $btn-primary-hover, transparent);
+      text-transform: lowercase;
+      border-radius: 8px !important;
+      margin: 0 -8px;
+      z-index: 2;
+
+      &:first-child {
+        margin: 0 -8px 0 0;
+      }
+
+      &:last-child {
+        margin: 0 0 0 -8px;
+      }
+
+      &:first-letter {
+        text-transform: capitalize;
+      }
+
+      &:focus, &.focus {
+        background-color: $btn-primary-focus;
+      }
+
+      &.disabled, &:disabled {
+        background: $btn-primary-disabled;
+        color: $btn-primary-disabled-color;
+        opacity: 0.3;
+      }
+    }
+
+    br + span {
+      font-weight: 700;
+    }
+  }
+}

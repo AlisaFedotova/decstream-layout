@@ -1,0 +1,10 @@
+{
+  "vendor"  : "yourgamblingsystem",
+  "faces"   : ["ygs","ygs2"],
+  "branch"  : "37",
+  "iext"    : "",
+  "instance_ext"  : "",
+  "commit_revision": "132298",
+  "revision": "132395",
+  "revdate" : "2021-03-12T04:28:27.345519Z"
+}

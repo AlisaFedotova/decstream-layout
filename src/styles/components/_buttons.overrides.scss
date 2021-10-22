@@ -1,0 +1,152 @@
+.btn {
+  text-transform: uppercase;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &.btn-primary {
+    @include button-variant($btn-primary-bg, transparent, $btn-primary-hover, transparent, $btn-primary-hover, transparent);
+    text-transform: uppercase;
+
+    &:focus, &.focus {
+      background-color: $btn-primary-focus;
+    }
+
+    &.disabled, &:disabled {
+      background: $btn-primary-disabled;
+      color: $btn-primary-disabled-color;
+      opacity: 0.3;
+      cursor: auto;
+    }
+  }
+
+  &.btn-secondary {
+    @include button-variant($btn-secondary-bg, transparent, $btn-secondary-hover, transparent, $btn-secondary-hover, transparent);
+    text-transform: uppercase;
+    color: $base-grey;
+
+    &:focus, &.focus {
+      color: $base-grey;
+      background-color: $btn-secondary-focus;
+    }
+
+    &.disabled, &:disabled {
+      background: $btn-secondary-disabled;
+      opacity: 1;
+      cursor: auto;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active,
+    .show > &.dropdown-toggle {
+      color: $base-grey;
+    }
+
+    &:hover {
+      color: $base-grey;
+    }
+  }
+
+  &.btn-link {
+    font-size: 1rem;
+    text-transform: lowercase;
+
+    &:first-letter {
+      text-transform: capitalize;
+    }
+
+    &.disabled, &:disabled {
+      color: $link-disabled-color;
+      opacity: 0.3;
+    }
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: none;
+    }
+
+    &:focus, &.focus {
+      color: $link-focus-color;
+      text-decoration: none;
+      box-shadow: none;
+    }
+  }
+
+  &.btn-danger {
+    @include button-variant($btn-danger-bg, transparent, $btn-danger-hover, transparent, $btn-danger-hover, transparent);
+    text-transform: uppercase;
+
+    &.disabled, &:disabled {
+      background-color: $btn-danger-disabled;
+      opacity: 0.3;
+      cursor: auto;
+    }
+
+    &:focus, &.focus {
+      background-color: $btn-danger-focus;
+    }
+  }
+
+  span + span {
+    opacity: 0.4;
+  }
+}
+
+.btn-del { //"Delete smth" red buttons in the ens of the page
+  width: 272px;
+}
+
+@media (max-width: $sm-screen) {
+  .btn-del {
+    width: 100%;
+  }
+}
+
+.btn-tag {
+  position: relative;
+  height: 40px;
+  border-radius: 50rem;
+  border: solid 1px #d6d8db;
+  background: #fff;
+  padding: 11px 16px 11px 32px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:before {
+    content: '×';
+    position: absolute;
+    left: 16px;
+    font-size: 1rem;
+    line-height: 40px;
+    top: 0;
+    bottom: 0;
+  }
+
+  & + .btn-tag {
+    margin-left: 16px;
+  }
+
+  span {
+    line-height: 18px;
+  }
+}
+
+.btn-round {
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  font-size: 1rem;
+}
+
+.btn-round i {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+

@@ -1,0 +1,107 @@
+.custom-switch {
+  .custom-control-label {
+    font-size: 0.9rem;
+    color: #353738;
+    line-height: 26px;
+
+    &:before {
+      border-color: #a0a3a6;
+      background-color: #a0a3a6;
+    }
+
+    &:after {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+      background-color: #fff;
+    }
+  }
+
+  .custom-control-input {
+    &:checked ~ .custom-control-label {
+      &:after {
+        background-color: #fff !important;
+      }
+    }
+  }
+
+  .custom-control {
+    z-index: 5;
+  }
+}
+
+.custom-checkbox {
+  .custom-control-label {
+    &:before {
+      border-color: #d6d8db;
+      top: 0.225rem;
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &:after {
+      top: 0.225rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .custom-control-input {
+    &[disabled],
+    &.disabled,
+    &:disabled {
+      &:checked ~ .custom-control-label {
+        color: $body-color;
+
+        &:before {
+          background-color: #babcbe !important;
+          border-color: #babcbe !important;
+        }
+
+        &:after {
+          background-image: escape-svg(url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8"><path fill="#ffffff" d="M10.683 5L13 7.352 7.434 13 3 8.2 5.391 5.925 7.509 8.22z" transform="translate(-420 -391) translate(417 386)"/></svg>'));
+        }
+      }
+    }
+  }
+
+  .custom-control-input {
+    &[disabled],
+    &:disabled {
+      ~ .custom-control-label {
+        color: $body-color;
+
+        &:before {
+          background-color: #babcbe !important;
+          border-color: #babcbe !important;
+        }
+      }
+    }
+
+    &:checked ~ .custom-control-label {
+      &:after {
+        background-size: 10px;
+      }
+
+      &:before {
+        background-color: #fff !important;
+        border-color: #353738 !important;
+      }
+    }
+
+    &:focus:not(:checked) ~ .custom-control-label::before {
+      background-color: rgba(59, 60, 61, 0.07) !important;
+      border-color: #353738 !important;
+    }
+
+    &:hover:not(:checked) ~ .custom-control-label::before {
+      border-color: #353738 !important;
+    }
+
+    &:focus:checked ~ .custom-control-label::before {
+      background-color: #e4e6e9 !important;
+    }
+
+    &:hover:checked ~ .custom-control-label::before {
+      border-color: #353738 !important;
+    }
+  }
+}

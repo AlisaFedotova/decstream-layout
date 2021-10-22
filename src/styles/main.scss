@@ -1,0 +1,307 @@
+/*!
+ * THIS FILE IS AUTO GENERATED FROM THE CORRESPONDING .scss FILE.
+ * PLEASE DO NOT EDIT. INSTEAD, EDIT THE .scss FILE AND THEN DO
+ * */
+
+@import "variables";
+
+@import "node_modules/bootstrap/scss/bootstrap-reboot";
+@import "node_modules/bootstrap/scss/grid";
+@import "node_modules/bootstrap/scss/utilities/spacing";
+@import "node_modules/bootstrap/scss/mixins";
+@import "node_modules/bootstrap/scss/modal";
+@import "node_modules/bootstrap/scss/utilities";
+@import "node_modules/bootstrap/scss/forms";
+@import "node_modules/bootstrap/scss/buttons";
+@import "node_modules/bootstrap/scss/close";
+@import "node_modules/bootstrap/scss/alert";
+@import "node_modules/bootstrap/scss/transitions";
+@import "node_modules/bootstrap/scss/breadcrumb";
+@import "node_modules/bootstrap/scss/list-group";
+@import "node_modules/bootstrap/scss/images";
+@import "node_modules/bootstrap/scss/tables";
+@import "node_modules/bootstrap/scss/custom-forms";
+@import "node_modules/bootstrap/scss/pagination";
+@import "node_modules/bootstrap/scss/button-group";
+@import "node_modules/bootstrap/scss/spinners";
+
+@import "layout";
+@import "components";
+@import "project-components";
+@import url("https://fonts.googleapis.com/css?family=Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i&display=swap");
+
+body {
+  //margin-right: calc(-1 * (100vw - 100%)); // to remove changing of content width due to scrollbar
+}
+
+.page-content {
+  display: flex;
+  max-width: $max-content-width;
+  min-height: calc(100vh - #{$header-height});
+  width: 100%;
+  margin: 0 auto;
+
+  .right-part, .left-part {
+    &__wrapper {
+      margin-top: $main-content-top-margin;
+      margin-bottom: 70px;
+      min-height: calc(100% - #{$main-content-top-margin});
+    }
+  }
+
+  .right-part {
+    width: calc(100% - #{$left-part-width} - #{$left-part-margin-right});
+  }
+}
+
+.left-part {
+  min-width: $left-part-width;
+  margin-right: $left-part-margin-right;
+
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - #{$side-content-offset} * 2);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: $md-screen) {
+  .page-content {
+    min-height: calc(100vh - #{$header-height-md});
+
+    .right-part {
+      width: 100%;
+    }
+  }
+
+  .left-part {
+    width: auto;
+    min-width: auto;
+    margin-right: 24px;
+
+    &__wrapper {
+      width: auto;
+    }
+  }
+}
+
+
+.right-part {
+  position: relative; //for spinner
+  width: 100%;
+  padding-left: 15px;
+
+  &__wrapper {
+    display: flex;
+    margin: 0 auto;
+    padding-right: 48px;
+  }
+}
+
+.logo {
+  padding: 0 22px;
+}
+
+@media (max-width: $md-screen) {
+  .left-part__wrapper > .logo {
+    display: none;
+  }
+  .right-part {
+    padding-left: 0;
+
+    &__wrapper {
+      padding: 0 $main-content-offset-md;
+      margin-bottom: 40px;
+    }
+  }
+  header.right-part {
+    width: calc(100% - #{$main-content-offset-md});
+  }
+}
+
+@media (max-width: $sm-screen) {
+  .right-part {
+    &__wrapper {
+      padding: 0 $main-content-offset-sm;
+    }
+  }
+  header.right-part {
+    &__wrapper {
+      padding: 0 $main-content-offset-sm 0 0;
+    }
+  }
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  color: $base-grey;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+h2 {
+  line-height: 1.2;
+}
+
+.desktop-only {
+  display: block;
+}
+
+@media (max-width: $sm-screen) {
+  .desktop-only {
+    display: none;
+  }
+}
+
+.tablet-only {
+  display: none;
+}
+
+@media (min-width: $sm-screen) and (max-width: $md-screen) {
+  .tablet-only {
+    display: block;
+  }
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: $sm-screen) {
+  .mobile-only {
+    display: block;
+  }
+}
+
+.md-and-lower {
+  display: block;
+}
+
+@media (min-width: $md-screen) {
+  .md-and-lower {
+    display: none;
+  }
+}
+
+.md-and-higher {
+  display: none;
+}
+
+@media (min-width: $md-screen) {
+  .md-and-higher {
+    display: block;
+  }
+}
+
+.group-address {
+  position: relative;
+  top: calc(-#{$main-content-top-margin} + 10px);
+  line-height: 1.7;
+  color: #9ea1a3;
+}
+
+.mb-40 {
+  margin-bottom: 40px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.mb-24 {
+  margin-bottom: 24px;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+#graphPeriodForm {
+  .btn-group .btn {
+    width: 160px;
+    height: fit-content;
+  }
+}
+
+@media (max-width: $md-screen) {
+  #graphPeriodForm {
+    margin-bottom: 24px;
+
+    .btn-group {
+      width: 100%;
+      order: 1;
+      margin-top: calc(40px - 16px); //margin - flex gap
+
+      .btn {
+        width: 50%;
+      }
+    }
+
+    select {
+      height: fit-content;
+    }
+
+    .my-col {
+      min-width: 170px;
+      padding: 0 7px
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .group-address {
+      p {
+        margin-bottom: 8px;
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.w-sm-272, .w-md-272 { //for special buttons with constant width
+  width: 272px;
+}
+
+@media (max-width: $sm-screen) {
+  .w-sm-272 {
+    width: auto !important;
+  }
+}
+
+@media (max-width: $md-screen) {
+  .w-md-272 {
+    width: auto !important;
+  }
+}
+
+.graph {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+@media (max-width: $md-screen) {
+  .graph {
+    padding: 8px;
+  }
+}
+
+.titles-filter select {
+  width: 100%;
+}
+
+@media (min-width: $md-screen) {
+  .titles-filter select {
+    width: 273px;
+  }
+}

@@ -1,0 +1,156 @@
+$table-stripped-border-radius: 8px;
+
+.table-cover {
+  padding: $table-stripped-border-radius;
+  margin: -$table-stripped-border-radius;
+  margin-bottom: 40px - $table-stripped-border-radius;
+}
+
+.table {
+  margin-bottom: 0;
+
+  th {
+    font-size: 0.6rem;
+    color: #9ea1a3;
+    padding: 0 1.5rem 0.5rem 1.5rem;
+    text-transform: uppercase;
+  }
+}
+
+.table.table-striped {
+  //box-shadow: 0 0 7px 0 rgb(0 0 0 / 5%);
+  border-radius: $table-stripped-border-radius;
+  border-collapse: separate;
+  border-spacing: 0 1px;
+
+  tbody tr {
+    border-radius: 0;
+    box-shadow: 0 0 7px 0 rgb(0 0 0 / 5%);
+
+    &:first-child {
+      td:first-of-type {
+        border-top-left-radius: $table-stripped-border-radius;
+      }
+
+      td:last-of-type {
+        border-top-right-radius: $table-stripped-border-radius;
+      }
+    }
+
+    &:last-child {
+      td:first-of-type {
+        border-bottom-left-radius: $table-stripped-border-radius;
+      }
+
+      td:last-of-type {
+        border-bottom-right-radius: $table-stripped-border-radius;
+      }
+    }
+  }
+
+  tbody td {
+    background: #fff;
+  }
+
+  tbody tr:nth-of-type(#{$table-striped-order}) {
+    td {
+      background-color: $table-accent-bg;
+    }
+  }
+}
+
+.table.table-list {
+  border-collapse: separate;
+  border-spacing: 0 4px;
+  box-shadow: none;
+  background: transparent;
+
+  tbody tr {
+    border-radius: 4px;
+    box-shadow: 0 0 7px 0 rgb(0 0 0 / 5%);
+
+    &:hover {
+      box-shadow: 0 0 7px 0 rgb(0 0 0 / 10%);
+    }
+  }
+
+  td {
+    background: #fff !important;
+    vertical-align: middle;
+
+    &:first-child {
+      @include border-top-left-radius($table-stripped-border-radius);
+      @include border-bottom-left-radius($table-stripped-border-radius);
+    }
+
+    &:last-child {
+      @include border-top-right-radius($table-stripped-border-radius);
+      @include border-bottom-right-radius($table-stripped-border-radius);
+      width: 34px; //restrict arrow width for firefox
+
+      img {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  &.with-icons {
+    th:first-child, td:first-child {
+      width: 55px;
+      padding-left: 25px !important;
+      padding-right: 8px !important;
+    }
+
+    tr {
+      position: relative;
+
+      &:after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 2px;
+        height: calc(100% - 8px);
+        border-radius: 2px;
+      }
+
+      &.red_cross:after {
+        background-color: #de5c62;
+      }
+
+      &.triangle_exclamation:after {
+        background-color: #eab940;
+      }
+    }
+  }
+}
+
+.hover-only { //for Delete icon in sessions table
+  div {
+    visibility: hidden;
+  }
+}
+
+.hover-only:hover {
+  div {
+    visibility: visible;
+  }
+}
+
+@media (max-width: $sm-screen) {
+  .table-cover {
+    padding: 0;
+    margin: 0 0 40px 0;
+  }
+}
+
+.datebox:not(:first-child) {
+  margin-top: 40px;
+}
+
+.td-fixwidth{
+  max-width: 400px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

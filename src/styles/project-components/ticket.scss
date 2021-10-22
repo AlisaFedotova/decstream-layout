@@ -1,0 +1,125 @@
+$ticket-bg: #fff;
+$ticket-bg-even: #f7f8fa;
+$ticket-border-radius: 8px;
+$ticket-color: #353738;
+$ticket-text-gap: 24px;
+
+.ticket {
+  display: flex;
+  min-height: 148px;
+  color: $ticket-color;
+  padding: 22px 24px;
+  margin-bottom: 8px;
+  background: $ticket-bg;
+  border-radius: $ticket-border-radius;
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 5%);
+
+  &-body {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    gap: $ticket-text-gap;
+  }
+
+  &-title-block {
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  &-title {
+    width: 100%;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    white-space: break-spaces;
+  }
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    &-subtitle {
+      color: #9ea1a3;
+      font-size: 0.8rem;
+      text-transform: lowercase;
+
+      &:first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &-transition {
+    align-self: center;
+    padding-left: 1rem;
+  }
+
+  .ticket-btn {
+    background: transparent;
+    border: 0;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    right: 0;
+    bottom: 0;
+
+    svg {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+    }
+  }
+}
+
+.ticket.red_cross {
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 4px;
+    height: calc(100% - 16px);
+    border-radius: 2px;
+    background-color: #de5c62;
+  }
+}
+
+.ticket.triangle_exclamation {
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 4px;
+    height: calc(100% - 16px);
+    border-radius: 2px;
+    background-color: #eab940;
+  }
+}
+
+.ticket-set {
+  margin-bottom: 8px;
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 5%);
+
+  .ticket {
+    border-radius: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+
+    &:first-child {
+      border-radius: $ticket-border-radius $ticket-border-radius 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 $ticket-border-radius $ticket-border-radius;
+    }
+  }
+
+  .ticket:nth-child(2n) {
+    background: $ticket-bg-even;
+  }
+}

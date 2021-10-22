@@ -1,0 +1,45 @@
+.primary-block { //wrapper for block in the top of the inner pages. For filtration buttons and other
+  margin-bottom: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .btn-primary {
+    max-width: 273px;
+    width: 100%;
+  }
+}
+
+.page-subheader { //wrapper for 2h headers on inner pages and its buttons
+  display: flex;
+  margin-bottom: 24px;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+    max-width: calc(100% - 70px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn {
+    margin-left: 8px;
+  }
+}
+
+@media (max-width: $sm-screen) {
+  .primary-block {
+    .btn-primary {
+      max-width: none;
+      margin-left: 0 !important;
+    }
+
+    select.form-control {
+      width: 100%;
+    }
+
+    .btn-secondary {
+      width: 100%;
+    }
+  }
+}

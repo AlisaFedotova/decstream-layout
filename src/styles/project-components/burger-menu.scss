@@ -1,0 +1,126 @@
+.hamburger-menu {
+  display: none;
+
+  .userbox {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+  }
+}
+
+#menu__toggle {
+  opacity: 0;
+  position: absolute;
+}
+
+.menu__btn {
+  display: flex;
+
+  /* используем flex для центрирования содержимого */
+  align-items: center;
+
+  /* центрируем содержимое кнопки */
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 21px;
+  margin: 0;
+  cursor: pointer;
+  z-index: 20;
+
+  > span {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+
+    &::before, &::after {
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #fff;
+    }
+
+    &::before {
+      content: '';
+      top: -8px;
+    }
+
+    &::after {
+      content: '';
+      top: 8px;
+    }
+  }
+}
+
+#menu__toggle:checked ~ .menu__btn > span {
+  background: #3b3c3d;
+
+  &::before, &::after {
+    background: #3b3c3d;
+  }
+}
+
+.menu__box {
+  display: block;
+  position: fixed;
+  visibility: hidden;
+  top: 0;
+  bottom: 0;
+  left: -100vw;
+  width: 100%;
+  max-width: $md-screen;
+  height: 100vh;
+  margin: 0 !important;
+  padding-top: $burger-menu-header-height;
+  list-style: none;
+  background-color: $burger-menu-bg;
+  z-index: 10;
+}
+
+#menu__toggle:checked ~ {
+
+  .menu__btn > span {
+    transform: rotate(45deg);
+
+    &::before {
+      top: 0;
+      transform: rotate(0);
+    }
+
+    &::after {
+      top: 0;
+      transform: rotate(90deg);
+    }
+  }
+
+  .menu__box {
+    visibility: visible;
+    left: 0;
+  }
+}
+
+.menu__btn > span {
+  transition-duration: .25s;
+
+  &::before, &::after {
+    transition-duration: .25s;
+  }
+}
+
+.menu__box, .menu__item {
+  transition-duration: .25s;
+}
+
+body.overflow-hidden {
+  overflow: hidden;
+}
+
+@media (max-width: $md-screen) {
+  .hamburger-menu {
+    display: flex;
+  }
+}

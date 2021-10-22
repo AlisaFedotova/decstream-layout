@@ -1,0 +1,64 @@
+.collapse-group {
+  border: 1px solid coral;
+
+  .collapse-level {
+    width: 100%;
+  }
+
+  .node {
+    height: 42px;
+    width: 100%;
+    font-size: 0.88rem;
+    background: transparent;
+    border: 1px solid;
+    text-align: left;
+    font-weight: 500;
+
+    span {
+      position: relative;
+      left: 20px;
+      text-transform: lowercase;
+
+      &:first-letter {
+        text-transform: capitalize;
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: -20px;
+        top: 2px;
+        width: 12px;
+        height: 12px;
+        border: 1px solid midnightblue;
+      }
+    }
+
+    &.collapsed {
+      span {
+        position: relative;
+        left: 20px;
+
+        &:before {
+          content: '';
+          position: absolute;
+          left: -20px;
+          top: 2px;
+          width: 12px;
+          height: 12px;
+          border: 1px solid plum;
+        }
+      }
+    }
+
+    &.selected {
+      background: #e2e2e2;
+      font-weight: 600;
+    }
+
+    &:hover {
+      background: #faf1f2;
+      color: #c94e60;
+    }
+  }
+}

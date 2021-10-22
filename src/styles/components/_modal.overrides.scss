@@ -1,0 +1,51 @@
+.modal {
+  .modal-header {
+    z-index: 11; //for spinners overlap
+  }
+
+  .btn, .form-group {
+    &:last-of-type {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .btn-line {
+    div {
+      padding-left: 7px;
+      padding-right: 7px;
+
+      &:first-child {
+        padding-left: 15px;
+      }
+
+      &:last-child {
+        padding-right: 15px;
+      }
+    }
+  }
+}
+
+@media (max-width: $sm-screen) {
+  .modal-header {
+    padding: 1.9rem 2.5rem 0 1.8rem;
+  }
+
+  .modal-body {
+    padding: 1.4rem 1.8rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .modal .btn-line {
+    div {
+      padding-left: 15px;
+      padding-right: 15px;
+
+      &:first-child {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}

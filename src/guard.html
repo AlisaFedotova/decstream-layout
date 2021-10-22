@@ -1,0 +1,2542 @@
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title id="pageTitle">Охрана - DecStream</title>
+
+  <meta name="theme-color" content="#15273B">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="DecStream">
+  <meta name="apple-mobile-web-app-title" content="DecStream">
+  <meta name="msapplication-navbutton-color" content="#15273B">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="msapplication-starturl" content="/">
+</head>
+<body class="" style="">
+<div class="modal fade" id="addhard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="">
+      <button type="button" class="close bg-danger bclose" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h5 class="modal-title py-2" id="addDeviceModalTitle">ДОБАВЛЕНИЕ УСТРОЙСТВА</h5>
+      <div class="modal-body text-center" id="selectDeviceOrGroup">
+        <button class="w-100 btn btn-primary btn-radius mt-4 py-3 text-center"
+                onclick="$('#selectDeviceOrGroup,#addVirtualDeviceTile').hide();$('#addDeviceTile').show();">Устройство
+        </button>
+        <button class="w-100 btn btn-primary btn-radius mt-4 py-2 text-center"
+                onclick="$('#selectDeviceOrGroup').hide();$('#addVirtualDeviceTile,#addVirtualDeviceTypeTile').show();">
+          <div style="margin-bottom: -7px;">Прибор учёта</div>
+          <small>с импульсным выходом</small></button>
+      </div>
+      <script>
+        var vType = '';
+        var sourceDevices = [];
+        var selectedDeviceIterator = -1;
+        var selectedFunctionIterator = -1;
+        var newVirtualDeviceName = '';
+        var newVirtualDeviceSerial = '';
+        var newVirtualDeviceFactor = 0;
+        var newVirtualDeviceCost = 0;
+        var newVirtualDevicePurpose = 'NONE';
+        var sourceDeviceTemperatureFuncId = -1;
+
+        function createVirtualDeviceCallback(data) {
+          console.log(data);
+          if (!data.virtualDeviceCreation.status)
+            notifyError(data.virtualDeviceCreation.error);
+          else
+            document.location.href = "./?/devices/info/?id=" + data.virtualDeviceCreation.device.device.id;
+        }
+
+        function createVirtualDeviceFinish() {
+          newVirtualDevicePurpose = $('#addVirtualDevicePurposeSelect').val();
+          currentValue = $('#addVirtualDeviceFactorInput').val();
+          newVirtualDeviceCost = $('#addVirtualDeviceCostInput').val();
+          rcmsQuery('devices/add/?virtual', {
+            type: vType,
+            sourceDeviceId: sourceDevices[selectedDeviceIterator].id,
+            sourceFunctionId: sourceDevices[selectedDeviceIterator].functions[selectedFunctionIterator].id,
+            sourceFunctionValue: sourceDevices[selectedDeviceIterator].functions[selectedFunctionIterator].data.count,
+            name: newVirtualDeviceName,
+            serial: newVirtualDeviceSerial,
+            currentValue: currentValue,
+            cost: newVirtualDeviceCost,
+            purpose: newVirtualDevicePurpose,
+            temperatureFunc: sourceDeviceTemperatureFuncId
+          }, createVirtualDeviceCallback, null);
+        }
+
+        function createVirtualDeviceToFactor() {
+          newVirtualDeviceName = $('#addVirtualDeviceNameInput').val();
+          newVirtualDeviceSerial = $('#addVirtualDeviceSerialInput').val();
+          if (newVirtualDeviceName == '' || newVirtualDeviceSerial == '')
+            notifyWarn('Все поля обязательны к заполнению!');
+          else {
+            $('#addVirtualDeviceCostAndFactor').show();
+            $('#addVirtualDeviceNameAndSerial').hide();
+            if (vType == 'WATER_COUNTER')
+              $('#addVirtualWaterPurpose').show();
+            else
+              $('#addVirtualWaterPurpose').hide();
+          }
+        }
+
+        function createVirtualDeviceSelectSourceExit(func_id) {
+          selectedFunctionIterator = func_id;
+          $('#addVirtualDeviceNameInput, #addVirtualDeviceSerialInput').val('');
+          $('#addVirtualDeviceNameAndSerial').show();
+          $('#addVirtualDeviceSelectExit').hide();
+
+        }
+
+        function createVirtualDeviceSelectSource(id) {
+          selectedDeviceIterator = id;
+          $('#addVirtualDeviceSelectSource').hide();
+          $('#addVirtualDeviceSelectExit').show();
+          var $select = $('#virtualDeviceSelectSourceExit');
+          $select.html('');
+
+          for (var i = 0; i < sourceDevices[id].functions.length; i++) {
+            if (sourceDevices[id].functions[i].type == 'THERMOMETER')
+              sourceDeviceTemperatureFuncId = sourceDevices[id].functions[i].id;
+            else {
+              if (sourceDevices[id].functions[i].type == 'IMPULSE_COUNTER')
+                $select.append($("<div class=\"borderIndicator\">" +
+                  "<a onclick=\"createVirtualDeviceSelectSourceExit(" + i + ")\" style=\"cursor: pointer;\">" +
+                  "<li class=\"text-primary\"><b class=\"p-2\">" + sourceDevices[id].functions[i].name + "</b></li></a>" +
+                  "</div>", null));
+            }
+          }
+
+        }
+
+        function getSourceDevicesCallback(data) {
+          console.log(data);
+          var $select = $('#virtualDeviceSelectSource');
+          $select.html('');
+          //for(var j = 0; j < 20; j++)
+          sourceDevices = data.sourceDevices.data.device_contexts;
+          for (var i = 0; i < data.sourceDevices.data.device_contexts.length; i++) {
+            $select.append($("<div class=\"borderIndicator\">" +
+              "<a onclick=\"createVirtualDeviceSelectSource(" + i + ")\" style=\"cursor: pointer;\">" +
+              "<li class=\"text-primary\"><b class=\"p-2\">" + data.sourceDevices.data.device_contexts[i].name + "</b></li></a>" +
+              "</div>", null));
+          }
+        }
+
+        function createVirtualDeviceSelectType(type) {
+          vType = type;
+          var typeName = 'ДОБАВИТЬ ';
+          switch (vType) {
+            case 'WATER_COUNTER':
+              typeName += 'ВОДОСЧЁТЧИК';
+              break;
+            case 'ELECTRICITY_COUNTER':
+              typeName += 'ЭЛЕКТРОСЧЁТЧИК';
+              break;
+            case 'GAS_COUNTER':
+              typeName += 'ГАЗОСЧЁТЧИК';
+              break;
+          }
+          $('#addDeviceModalTitle').html(typeName);
+          $('#addVirtualDeviceTypeTile').hide();
+          $('#addVirtualDeviceSelectSource').show();
+          rcmsQuery('organization/devices/?getSourceDevices', null, getSourceDevicesCallback, null);
+        }
+      </script>
+      <div class="modal-body text-center" id="addVirtualDeviceTile">
+        <div id="addVirtualDeviceTypeTile" style="display:none;">
+          <ul class="listcomp" style="padding-inline-start: 10px;">
+            <div class="borderIndicator">
+              <a onclick="createVirtualDeviceSelectType('WATER_COUNTER')" style="cursor: pointer;">
+                <li class="text-primary"><b class="p-2">Водосчётчик</b></li>
+              </a>
+            </div>
+            <div class="borderIndicator">
+              <a onclick="createVirtualDeviceSelectType('ELECTRICITY_COUNTER')" style="cursor: pointer;">
+                <li class="text-primary"><b class="p-2">Электросчётчик</b></li>
+              </a>
+            </div>
+            <div class="borderIndicator">
+              <a onclick="createVirtualDeviceSelectType('GAS_COUNTER')" style="cursor: pointer;">
+                <li class="text-primary"><b class="p-2">Газосчётчик</b></li>
+              </a>
+            </div>
+          </ul>
+
+          <div class="row w-100">
+            <div class="col-6" style="margin-left:10px;">
+              <button type="button" onclick="$('#addVirtualDeviceTypeTile').hide();$('#selectDeviceOrGroup').show();"
+                      class="btn btn-link p-3 mt-4 w-100"
+                      style="text-decoration: underline; height:60px;text-align: left;">Назад
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="addVirtualDeviceSelectSource" class="row text-center" style="display:none;">
+          <div class="col-sm">
+            <ul id="virtualDeviceSelectSource" class="listcomp">
+            </ul>
+
+            <div class="row w-100">
+              <div class="col-6" style="margin-left:10px;">
+                <button type="button"
+                        onclick="$('#addVirtualDeviceSelectSource').hide();$('#addVirtualDeviceTypeTile').show();"
+                        class="btn btn-link p-3 mt-4 w-100"
+                        style="text-decoration: underline; height:60px;text-align: left;">Назад
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="addVirtualDeviceSelectExit" class="row text-center" style="display:none;">
+          <div class="col-sm">
+            <ul id="virtualDeviceSelectSourceExit" class="listcomp">
+            </ul>
+
+            <div class="row w-100">
+              <div class="col-6" style="margin-left:10px;">
+                <button type="button"
+                        onclick="$('#addVirtualDeviceSelectExit').hide();$('#addVirtualDeviceSelectSource').show();"
+                        class="btn btn-link p-3 mt-4 w-100"
+                        style="text-decoration: underline; height:60px;text-align: left;">Назад
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="addVirtualDeviceNameAndSerial" class="row text-center" style="display:none">
+          <p>Введите название и серийный номер добавляемого устройства</p>
+          <input type="text" class="form-control fields2 p-4" id="addVirtualDeviceNameInput" placeholder="Название">
+          <input type="text" class="form-control fields2 p-4 mt-4" id="addVirtualDeviceSerialInput"
+                 placeholder="Серийный номер">
+
+          <div class="row w-100" style="">
+            <div class="col-6" style="margin-left:10px;">
+              <button type="button"
+                      onclick="$('#addVirtualDeviceNameAndSerial').hide();$('#addVirtualDeviceSelectExit').show();"
+                      class="btn btn-link p-3 mt-4 w-100"
+                      style="text-decoration: underline; height:60px;text-align: left;">Назад
+              </button>
+            </div>
+            <div class="col-6" style="position:absolute;right:0;">
+              <button type="button" onclick="createVirtualDeviceToFactor()"
+                      class="w-100 btn btn-primary btn-radius mt-4 py-3 text-center">Далее
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <div id="addVirtualDeviceCostAndFactor" class="row text-center" style="display:none">
+          <p>Введите цену одного импульса и текущие показания счетчика</p>
+          <input type="number" class="form-control fields2 p-4 my-2" id="addVirtualDeviceCostInput"
+                 placeholder="Цена импульса">
+          <input type="number" class="form-control fields2 p-4 my-2" id="addVirtualDeviceFactorInput"
+                 placeholder="Текущие показания">
+          <div id="addVirtualWaterPurpose" class="w-100" style="display:none;">
+            <div class="row mt-2">
+              <div class="col-6 text-left pt-3">
+                <span>Назначение</span>
+              </div>
+              <div class="col-6">
+                <select class="form-control w-100" style="margin-top:-5px" id="addVirtualDevicePurposeSelect">
+                  <option value="NONE">Не задано</option>
+                  <option value="COLD_WATER">Холодная вода</option>
+                  <option value="HOT_WATER">Горячая вода</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row w-100" style="">
+            <div class="col-6" style="margin-left:10px;">
+              <button type="button"
+                      onclick="$('#addVirtualDeviceCostAndFactor').hide();$('#addVirtualDeviceNameAndSerial').show();"
+                      class="btn btn-link p-3 mt-4 w-100"
+                      style="text-decoration: underline; height:60px;text-align: left;">Назад
+              </button>
+            </div>
+            <div class="col-6" style="position:absolute;right:0;">
+              <button type="button" onclick="createVirtualDeviceFinish()"
+                      class="btn w-100 btn-primary btn-radius mt-4 py-3 text-center">Добавить
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="modal-body text-center" id="addDeviceTile">
+        <script>
+          function addSimpleDeviceCallback(data) {
+            if (data.addDeviceResult.status)
+              location.reload();
+            else
+              notifyError(data.addDeviceResult.message);
+          }
+
+          function addSimpleDevice() {
+            rcmsQuery('devices/add/?group=', {
+              addDevice: true,
+              deviceEui: $('#deviceDevEUI').val()
+            }, addSimpleDeviceCallback, null);
+          }
+        </script>
+        <p>Введите номер устройства (DEV EUI) написанный на коробке.</p>
+        <input type="text" class="form-control fields2 p-4" id="deviceDevEUI" placeholder="Номер устройства">
+        <button class="w-100 btn btn-primary btn-radius mt-4 py-3 text-center" onclick="addSimpleDevice()">
+          ДОБАВИТЬ
+        </button>
+      </div>
+      <div class="modal-body text-center" id="addGroupTile" style="display:none;">
+        <p>Введите название группы.</p>
+        <script>
+          function createGroupCallback(data) {
+            if (data.groupCreateResult.status)
+              document.location.reload();
+            else
+              notifyError(data.groupCreateResult.error);
+          }
+
+          function createGroup() {
+            rcmsQuery('devices/add/?group=&addGroup', {groupName: $('#addGroupInput').val()}, createGroupCallback, null);
+          }
+        </script>
+        <form method="POST" id="createGroupForm" action="/?/devices/add/?group=&amp;addGroup">
+          <input type="text" class="form-control fields2 p-4" id="addGroupInput" name="groupName"
+                 placeholder="Название группы">
+          <button type="button" onclick="createGroup()" class="w-100 btn btn-primary btn-radius mt-4 py-3 text-center"
+                  name="addGroup">ДОБАВИТЬ
+          </button>
+        </form>
+        <script>
+          $("#createGroupForm").submit(function (e) {
+            createGroup();
+            return false;
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('#addhard').on('shown.bs.modal', function () {
+    $('#addHardInput').focus()
+  });
+  $('#addhard').on('hidden.bs.modal', function () {
+    $('#addHardInput,#addGroupInput').val('');
+    $('#selectDeviceOrGroup').show();
+    $('#addDeviceModalTitle').html('ДОБАВЛЕНИЕ УСТРОЙСТВА');
+    $('#addDeviceTile,#addGroupTile,#addVirtualDeviceCostAndFactor,#addVirtualDeviceNameAndSerial,#addVirtualDeviceSelectExit,#addVirtualDeviceSelectSource,#addVirtualDeviceTypeTile').hide();
+
+
+  })
+  ;
+
+</script>
+<div class="modal fade" id="editfilterevents" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <button type="button" class="close bg-danger bclose" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <div class="modal-body text-center">
+        <h5 class="modal-title p-3" id="exampleModalLabel">НАСТРОЙКА ФИЛЬТРОВ</h5>
+        <div class="row">
+          <div class="col-sm p-4">
+            <form class="container" method="POST" action="./?/events/">
+              <div class="form-group row text-left">
+                <div class="col-sm-12 checksv checkbox">
+                </div>
+              </div>
+              <div class="row">
+                <div class="mt-5 text-left col-sm-6">
+                  <a href="./?/events/" class="text-danger">Сбросить все фильтры</a>
+                </div>
+                <div class="mt-5 text-right col-sm-6">
+                  <button type="submit" class="btn btn-primary btn-radius p-3">Применить</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('#editfilterevents').on('hidden.bs.modal', function () {
+    document.getElementById('groupDevices').checked = $('#groupDevices').attr('def-val') == 'checked';
+  });
+
+  function changeTypeOnSwitch() {
+    if ($('#groupDevices').prop('checked'))
+      document.getElementById('filterForm').action = './?/organization/groups/?group=';
+    else
+      document.getElementById('filterForm').action = './?/organization/devices/';
+  }
+</script>
+<div class="modal fade" id="editfilterfunctiontypes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <button type="button" class="close bg-danger bclose" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <div class="modal-body text-center">
+        <h5 class="modal-title p-3" id="exampleModalLabel">НАСТРОЙКА ФИЛЬТРОВ</h5>
+        <div class="row">
+          <div class="col-sm p-4">
+            <form class="container" id="filterForm" method="POST" action="./?/organization//?group=">
+              <div class="form-group row text-left">
+                <div class="col-sm-12 checksv checkbox">
+                  <div class="pb-3">
+                    <input id="groupDevices" type="checkbox" name="groupDevices" def-val="" value="">
+                    <label for="groupDevices" style="line-height:1;">Группировать устройства</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mt-5 text-left col-sm-6">
+                  <a href="./?/organization/?removeFunctionTypeFilters" class="text-danger">Сбросить все фильтры</a>
+                </div>
+                <div class="mt-5 text-right col-sm-6">
+                  <button type="submit" class="btn btn-primary btn-radius p-3" onclick="changeTypeOnSwitch()">
+                    Применить
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('#editfilterfunctiontypes').on('hidden.bs.modal', function () {
+  });
+
+  function onUserChangeFilters(elementId) {
+    document.getElementById('uncheck_' + elementId).name = document.getElementById(elementId).checked ? '' : 'removeFunctionTypeFilterItems[' + elementId + ']';
+  }
+</script>
+<div class="modal userbox-modal fade" id="organizationsInfo" tabindex="-1" role="dialog"
+     aria-labelledby="organizationInfoLabel" aria-modal="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Информация об аккаунте</h2>
+        <button type="button" class="close mobile-only" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="btn-close"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p>User Test Superr</p>
+          <a href="#">user@user.ru</a>
+        </div>
+        <div class="d-flex userbox-buttons">
+          <a role="button" href="./?/profile/" class="btn btn-primary btn-custom w-text-uppercase">ИЗМЕНИТЬ</a>
+          <a role="button" href="./?/logout" class="btn btn-secondary btn-custom rounded-pill text-uppercase">ВЫЙТИ</a>
+        </div>
+        <ul class="list-group">
+          <li class="list-group-item active"><a href="./?/members/?organization=10">
+            <b>
+              User T. S.
+            </b>
+          </a>
+          </li>
+          <li class="list-group-item "><a href="./?/members/?organization=3">
+
+            Хорошая
+
+          </a>
+          </li>
+          <li class="list-group-item "><a href="./?/members/?organization=8">
+
+            УК
+
+          </a>
+          </li>
+          <li class="list-group-item "><a href="./?/members/?organization=310">
+
+            Томика23
+
+          </a>
+          </li>
+          <li class="list-group-item "><a href="./?/members/?organization=1184">
+
+            Тест 404 не трогать
+
+          </a>
+          </li>
+          <li class="list-group-item "><a href="./?/members/?organization=261">
+
+            ООО "Декстрим компани"
+
+          </a>
+          </li>
+          <li class="list-group-item "><a href="./?/members/?organization=262">
+
+            262
+
+          </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function changeProfileCallback(data) {
+    console.log(data);
+    if (data.profileChangeResponse.status) {
+      notifyInfo(data.profileChangeResponse.message);
+      $(
+        '#orginfo > div > div > div > div.row.px-4.pt-1.pb-1 > div > p > b')
+        .html(
+          $('#changeProfileFirst').val() + " "
+          + $('#changeProfileMiddle').val() + " "
+          + $('#changeProfileLast').val());
+      $(
+        '#orginfo > div > div > div > div.row.px-4.pt-1.pb-1 > div > p > a')
+        .html($('#changeProfileEmail').val());
+      $('#changeProfileFirst').attr('def-val',
+        $('#changeProfileFirst').val());
+      $('#changeProfileMiddle').attr('def-val',
+        $('#changeProfileMiddle').val());
+      $('#changeProfileLast').attr('def-val',
+        $('#changeProfileLast').val());
+      $('#changeProfileEmail').attr('def-val',
+        $('#changeProfileEmail').val());
+      $('#nameinfo').modal('hide');
+    } else
+      notifyError(data.profileChangeResponse.error);
+  }
+
+  function changeProfileData() {
+    rcmsQuery('profile/edit', {
+      first: $('#changeProfileFirst').val(),
+      middle: $('#changeProfileMiddle').val(),
+      last: $('#changeProfileLast').val(),
+      email: $('#changeProfileEmail').val()
+    }, changeProfileCallback, null);
+  }
+</script>
+<div class="modal fade" id="nameinfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content p-3">
+      <button type="button" class="close bg-danger bclose" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h6 class="modal-title pt-3" id="exampleModalLabel">ИЗМЕНЕНИЕ
+        ДАННЫХ ПОЛЬЗОВАТЕЛЯ</h6>
+      <div class="modal-body text-center">
+        <div class="row">
+          <div class="col-sm pb-4 ">
+            <form method="POST" action="/?/profile/edit/">
+              <div class="mb-4 position-relative inbox">
+                <p>user@user.ru</p>
+              </div>
+              <div class="mb-4 position-relative inbox">
+                <label class="toplabel d-none" for="lastNameInfo">Фамилия</label>
+                <input type="text" class="form-control fields2"
+                       style="padding-left: 16px !important; padding-top: 26px !important;" name="last"
+                       id="changeProfileLast" def-val="User" value="User"><small
+                class="text-danger text-truncate inftext">
+
+              </small>
+              </div>
+              <div class="mb-4 position-relative inbox">
+                <label class="toplabel d-none" for="exampleInputimya">Имя</label>
+                <input type="text" class="form-control fields2"
+                       style="padding-left: 16px !important; padding-top: 26px !important;" name="first"
+                       id="changeProfileFirst" def-val="Test" value="Test"> <small
+                class="text-danger text-truncate inftext">
+
+              </small>
+              </div>
+              <div class="mb-4 position-relative inbox">
+                <label class="toplabel d-none" for="exampleInputot">Отчество</label>
+                <input type="text" class="form-control fields2"
+                       style="padding-left: 16px !important; padding-top: 26px !important;" name="middle"
+                       id="changeProfileMiddle" def-val="Superr" value="Superr"> <small
+                class="text-danger text-truncate inftext">
+
+              </small>
+              </div>
+
+
+              <button type="button" name="save" onclick="changeProfileData()" class="btn w-100 btn-primary p-3">
+                СОХРАНИТЬ
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  $('#nameinfo').on('shown.bs.modal', function () {
+    $('#changeProfileLast').focus()
+  });
+  $('#nameinfo').on(
+    'hidden.bs.modal',
+    function () {
+      $('#changeProfileLast').val(
+        $('#changeProfileLast').attr('def-val'));
+      $('#changeProfileFirst').val(
+        $('#changeProfileFirst').attr('def-val'));
+      $('#changeProfileMiddle').val(
+        $('#changeProfileMiddle').attr('def-val'));
+      $('#changeProfileEmail').val(
+        $('#changeProfileEmail').attr('def-val'));
+    });
+</script>
+<script type="text/javascript">
+
+  function mySubmitFunction(e) {
+    e.preventDefault();
+    changePassCall();
+    return false;
+  }
+
+  function changePassCallback(data) {
+    console.log(data);
+    if (data.profileChangeResponse.status) {
+      $('#changePasswordModal').modal('hide');
+      notifyInfo(data.profileChangeResponse.message);
+      $('#changePassOldPass').val('');
+      $('#changePassNewPass').val('');
+      $('#changePassNewPassR').val('');
+    } else {
+      notifyError(data.profileChangeResponse.error);
+    }
+  }
+
+  function changePassCall() {
+    if ($('#changePassNewPass').val() == $('#changePassNewPassR').val()) {
+      rcmsQuery('profile/edit', {
+        old_password: $('#changePassOldPass').val(),
+        new_password: $('#changePassNewPass').val(),
+        new_password_r: $('#changePassNewPassR').val()
+      }, changePassCallback, null);
+    } else {
+      notifyWarn('Повтор пароля не совпадает с новым паролем');
+      $('#changePassNewPassR').val('');
+    }
+  }
+</script>
+
+<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content p-3">
+      <button type="button" class="close bg-danger bclose" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h2 class="modal-title pt-3 text-left" id="exampleModalLabel">ИЗМЕНЕНИЕ ПАРОЛЯ</h2>
+      <div class="modal-body text-center">
+        <div class="row">
+          <div class="col-sm p-4">
+            <form method="POST" action="/?/profile/edit/" onsubmit="return mySubmitFunction(event)"
+                  oninput="new_password_r.setCustomValidity(new_password.value != new_password_r.value ? &quot;Повтор пароля не совпадает с новым паролем&quot; : &quot;&quot;)">
+              <div class="mb-4 position-relative inbox">
+                <label class="toplabel d-none" for="changePassOldPass">Старый пароль</label>
+                <input type="password" class="form-control fields2" name="old_password" id="changePassOldPass"
+                       def-val=""><small class="text-danger text-truncate inftext"></small>
+              </div>
+              <div class="mb-4 position-relative inbox">
+                <label class="toplabel d-none" for="changePassNewPass">Новый пароль</label>
+                <input type="password" class="form-control fields2" name="new_password" id="changePassNewPass"
+                       def-val="">
+              </div>
+              <div class="mb-4 position-relative inbox">
+                <label class="toplabel d-none" for="changePassNewPassR">Повторить пароль</label>
+                <input type="password" class="form-control fields2" name="new_password_r" id="changePassNewPassR"
+                       def-val="">
+              </div>
+              <div class="row">
+                <div class="text-right col-sm-12">
+                  <button id="registerButton" name="save" type="submit" class="btn w-100 btn-primary p-3">Изменить
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#changePasswordModal').on('hidden.bs.modal', function () {
+    $('#changePassOldPass').val('');
+    $('#changePassNewPass').val('');
+    $('#changePassNewPassR').val('');
+  });
+</script>
+<div class="modal fade" id="inviteAcceptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content pb-2">
+      <button type="button" class="close bg-danger bclose" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <div class="modal-body text-center">
+        <h5 class="modal-title p-3" id="exampleModalLabel">ПРИГЛАШЕНИЕ В ОРГАНИЗАЦИЮ</h5>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1.552cm"
+             height="1.552cm">
+          <path fill-rule="evenodd" fill="rgb(74, 189, 126)"
+                d="M22.253,43.061 C10.417,43.061 0.788,33.432 0.788,21.596 C0.788,9.760 10.417,0.131 22.253,0.131 C34.089,0.131 43.718,9.760 43.718,21.596 C43.718,33.432 34.089,43.061 22.253,43.061 ZM22.253,2.561 C11.757,2.561 3.218,11.100 3.218,21.596 C3.218,32.092 11.757,40.631 22.253,40.631 C32.749,40.631 41.288,32.092 41.288,21.596 C41.288,11.100 32.749,2.561 22.253,2.561 ZM20.731,28.883 C20.501,29.143 20.170,29.291 19.823,29.291 C19.549,29.291 19.279,29.197 19.064,29.026 L10.964,22.545 C10.710,22.342 10.551,22.053 10.515,21.730 C10.479,21.408 10.572,21.091 10.774,20.837 C10.977,20.584 11.266,20.425 11.589,20.389 C11.912,20.353 12.229,20.445 12.481,20.647 L19.681,26.407 L31.874,12.690 C32.091,12.446 32.387,12.302 32.712,12.283 C33.031,12.262 33.347,12.372 33.591,12.589 C33.833,12.803 33.977,13.100 33.996,13.424 C34.016,13.749 33.907,14.061 33.691,14.304 L20.731,28.883 Z"></path>
+        </svg>
+        <p>Ваше приглашение в организацию "" активировано.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<header>
+  <div class="wrapper">
+    <div class="left-part">
+      <div class="left-part__wrapper">
+        <div class="hamburger-menu">
+          <input id="menu__toggle" type="checkbox" onclick="changePageScrolling()">
+          <label class="menu__btn" for="menu__toggle">
+            <span></span>
+          </label>
+          <div class="aside-menu menu__box container-fluid mt-3" id="homeSubmenuMobile">
+            <div class="aside-menu-item">
+              <a href="./?/" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/jkh.svg">
+                ЖКХ
+              </a>
+            </div>
+            <div class="aside-menu-item">
+              <a href="./?/organization/groups" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/devices.svg">
+                Список устройств
+              </a>
+            </div>
+            <div class="aside-menu-item">
+              <a href="./?/events/" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/events.svg">
+                Журнал событий
+              </a>
+            </div>
+            <div class="aside-menu-item">
+              <a href="./?/reports/" class="w-100 d-block ">
+                <img src="./decstream_cp/public/images/menuIcons/reports.svg">
+                Отчеты
+              </a>
+            </div>
+            <div class="aside-menu-item">
+              <a href="./?/members/" class="w-100 d-block active">
+                <img src="./decstream_cp/public/images/menuIcons/users_active.svg">
+                Охрана
+              </a>
+            </div>
+            <div class="menu-bottom">
+              <div class="userbox text-left align-items-center" style="cursor:pointer;" data-toggle="modal"
+                   data-target="#organizationsInfo">
+                <div class="text-left">
+                  User T. S.
+                  <br>
+                  <b>User T. S.</b>
+                </div>
+                <i class="fa fa-angle-down pl-3" style="color:#c94e60; font-weight: 600;" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          function changePageScrolling() {
+            let body = document.body;
+            body.className = '';
+            if ($('#menu__toggle').prop('checked')) {
+              body.className = 'overflow-hidden';
+            }
+          }
+        </script>
+        <div class="logo">
+          <a href="/">
+            <img src="./decstream_cp/public/images/logo.png" alt="logo">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="right-part">
+      <div class="right-part__wrapper">
+        <nav aria-label="breadcrumb" class="d-flex align-items-center w-100" id="breadcrumbs">
+          <li class="breadcrumb-item active" aria-current="page">Охрана</li>
+        </nav>
+        <script>
+          function hideBackBtn() {
+            if (window.outerWidth < 768) {
+              let block = document.querySelector('#breadcrumbs');
+              let breadcrumbs = block.querySelectorAll('ol.breadcrumb>.breadcrumb-item');
+              let backBtn = block.querySelector('.bc-row-back');
+              backBtn.className = 'bc-row-back';
+              if (breadcrumbs.length <= 1) {
+                backBtn.className = backBtn.className + ' hide';
+              }
+            }
+          }
+
+          hideBackBtn();
+          $(window).resize(function () {
+              hideBackBtn();
+            }
+          )
+        </script>
+        <div class="userbox text-right align-items-center" style="cursor:pointer;" data-toggle="modal"
+             data-target="#organizationsInfo">
+          <div class="float-left">
+            <span class="text-nowrap">User T. S.</span>
+            <br>
+            <b class="text-nowrap">User T. S.</b>
+          </div>
+          <i class="fa fa-angle-down pl-3" style="color:#c94e60; font-weight: 600;" aria-hidden="true"></i>
+        </div>
+        <div class="logo tablet-only p-0">
+          <a href="/">
+            <img src="./decstream_cp/public/images/logo.png" alt="logo">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="page-content">
+  <aside class="left-part">
+    <div class="left-part__wrapper">
+      <ul class="aside-menu container-fluid" id="homeSubmenu2">
+        <li>
+          <a href="./?/" class="w-100 d-block ">
+            <img src="./decstream_cp/public/images/menuIcons/jkh.svg">
+            ЖКХ
+          </a>
+        </li>
+        <li>
+          <a href="./?/organization/groups" class="w-100 d-block ">
+            <img src="./decstream_cp/public/images/menuIcons/devices.svg">
+            Список устройств
+          </a>
+        </li>
+        <li>
+          <a href="./?/events/" class="w-100 d-block ">
+            <img src="./decstream_cp/public/images/menuIcons/events.svg">
+            Журнал событий
+          </a>
+        </li>
+        <li>
+          <a href="./?/reports/" class="w-100 d-block ">
+            <img src="./decstream_cp/public/images/menuIcons/reports.svg">
+            Отчеты
+          </a>
+        </li>
+        <li>
+          <a href="./?/members/" class="w-100 d-block active">
+            <img src="./decstream_cp/public/images/menuIcons/users_active.svg">
+            Пользователи и роли
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+  <main id="mainBlock" class="right-part">
+    <div class="text-center cpmain p-0">
+
+      <div class="cptop container-fluid text-left mb-4 px-4 pt-4 pb-2">
+        <div class="row">
+          <div style="flex-grow:10;">
+            <ol class="breadcrumb bg-light font-weight-bold align-middle pt-3">
+              <li class="breadcrumb-item"><a href="./?/organization/groups/&amp;date=18.09.2021"
+                                             class="dark-blue"><span>УСТРОЙСТВА</span></a></li>
+              <li class="breadcrumb-item" aria-current="page"><a
+                href="./?/organization/groups/?group=529&amp;date=18.09.2021" class="dark-blue"><span>Devices</span></a>
+              </li>
+              <li class="breadcrumb-item"><a href="./?/devices/info/?id=1208&amp;date=18.09.2021"
+                                             class="dark-blue"><span>UM0101 1208</span></a></li>
+              <li class="breadcrumb-item active dark-blue" aria-current="page">Охрана Перемещения</li>
+            </ol>
+
+          </div>
+          <script>
+            var lastDate = '18.09.2021', filterUrl = '&amp;date=18.09.2021'.replaceAll('&amp;', '&');
+
+            function replaceQueryParam(param, newval, search) {
+              var regex = new RegExp("([?;&])" + param + "[^&;]*[;&]?");
+              var query = search.replace(regex, "$1").replace(/&$/, '');
+
+              return (query.length > 4 ? query + "&" : "?/?") + (newval ? param + "=" + newval : '');
+            }
+
+            function loadForDate() {
+              if (lastDate != document.getElementById('datePicker').value) {
+                var url = document.location.search;
+                url = replaceQueryParam('date', $('#datePicker').val(), url);
+                document.location.href = url;
+              }
+            }
+          </script>
+          <div class="float-right text-right" style="flex-shrink:0;flex-basis:400px;">
+            <input id="datePicker" type="text" value="18.09.2021" class="form-control mr-2 inp"
+                   style="display:inline-block;max-width:130px;min-width: 130px;" onchange="loadForDate()">
+            <script type="text/javascript">
+              $(function () {
+
+                $.datetimepicker.setLocale('ru');
+                $('#datePicker').datetimepicker(
+                  {
+                    timepicker: false,
+                    format: 'd.m.Y',
+                    formatDate: 'Y-m-d',
+                    defaultDate: '18.09.2021'
+                  });
+              });
+            </script>
+
+            <button type="button" class="btn btn-primary btn-radius text-white py-3" data-toggle="modal"
+                    data-target="#editfilterevents"><i class="fa fa-filter pr-md-2  mx-2" aria-hidden="true"></i>
+              <div class="d-none d-md-inline">Фильтры</div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <script>
+        var lastDate = '18.09.2021', filterUrl = '&amp;date=18.09.2021'.replaceAll('&amp;', '&');
+
+        function setOperationMessageVisibility(id, show) {
+          displayBtn = show ? 'none' : 'inline-block';
+          displayMessage = show ? 'inline-block' : 'none';
+          $('#switch-' + id + '-ON').css('display', displayBtn);
+          $('#switch-' + id + '-OFF').css('display', displayBtn);
+        }
+
+        function startSwitchTimer(functionId) {
+          var timerId = setInterval(timer, 10000);
+
+          function timer() {
+            setOperationMessageVisibility(functionId, false);
+            clearInterval(timerId);
+          }
+        }
+
+        function startTimerCall(functionId) {
+          if (window.timerId == null) {
+            startSwitchTimer(functionId);
+          }
+        }
+
+        function functionOperationResult(data) {
+          console.log('security state result:');
+          console.log(data);
+          var functionId = data.operationResult.function.id;
+
+          if (data.operationResult.function.type == 'SECURITY') {
+            $('#switchBtn-' + functionId + '-disarm,#switchBtn-' + functionId + '-arm').attr('disabled', false);
+            var button = $('#switchBtn-' + functionId + '-' + data.operationResult.operation);
+            var label = $('#functionStateLabel-' + functionId);
+            label.text(data.operationResult.function.securityTitle);
+            var icon = $('#securityIconFunc-' + functionId);
+            icon.attr('src', './decstream_cp/public/images/icons/' + data.operationResult.function.securityIcon + '.png');
+            icon.attr('title', data.operationResult.function.securityTitle);
+            var error = (data.operationResult.function.data.state == 'DISARMED' && (data.operationResult.operation == 'arm' || data.operationResult.operation == 'delayed_arm')) ||
+              (data.operationResult.function.data.state == 'ARMED' && data.operationResult.operation == 'disarm');
+            console.log(error);
+            if (!error) {
+              opositeButton.show();
+              button.hide();
+            } else
+              notifyError('Ошибка ' + ((data.operationResult.operation == 'arm' || data.operationResult.operation == 'delayed_arm') ? 'постановки на охрану' : 'снятия с охраны') + (' функции ' + data.operationResult.function.name));
+          }
+        }
+
+        function functionOperation(obj, timerCall) {
+          $obj = $(obj);
+          functionId = $obj.attr('data-functionId');
+          functionName = $obj.attr('data-functionName');
+          rcmsQuery('devices/switch', {
+            functionId: functionId,
+            operation: $obj.attr('data-operation')
+          }, timerCall ? null : functionOperationResult);
+          if (timerCall)
+            startSwitchTimer(functionId);
+          else
+            $('#switchBtn-' + functionId + '-disarm,#switchBtn-' + functionId + '-arm').attr('disabled', true);
+          if ($obj.attr('data-operation') == 'arm' || $obj.attr('data-operation') == 'delayed_arm') {
+            notifyInfo('Отправка команды на постановку на охрану функции ' + functionName);
+          } else if ($obj.attr('data-operation') == 'disarm') {
+            notifyInfo('Отправка команды на снятие с охраны функции ' + functionName);
+          } else if ($obj.attr('data-operation') == "ON") {
+            $('#switchMessage-' + functionId).text('Отправка команды на включение на 1 минуту');
+            notifyInfo('Отправка команды на включение ' + functionName + ' на 1 минуту');
+          } else {
+            $('#switchMessage-' + functionId).text('Отправка команды на выключение');
+            notifyInfo('Отправка команды на выключение ' + functionName);
+          }
+          if (timerCall)
+            setOperationMessageVisibility(functionId, true);
+        }
+      </script>
+
+      <div class="cblocks" id="displayBlock">
+        <div class="container">
+
+          <div class="row row-flex text-left">
+            <div class="col-sm">
+              <div class="pb-3"><b>Данные функции Охрана Перемещения</b></div>
+              <div class="bg-light div-radius">
+                <table class="table table-striped m-0">
+                  <tbody>
+                  <tr>
+                    <td scope="row" style="vertical-align: middle">
+                      Последнее изменение
+                    </td>
+                    <th width="50%" class="border-left" style="vertical-align: middle">
+		                 <span class="text-dark">
+		                 01.01.2023 14:05:43
+		                 </span>
+                    </th>
+                  </tr>
+                  <tr>
+                    <td scope="row" style="vertical-align: middle">
+                      Состояние
+                    </td>
+                    <th width="50%" class="border-left" style="vertical-align: middle">
+		                 <span class="text-dark d-inline">
+		                 <img id="securityIconFunc-3058" src="./decstream_cp/public/images/icons/security/shield-check.png"
+                          style="width: 28px; height: auto; min-width: 24px;" title="На охране">
+		                    <b id="functionStateLabel-3058">На охране</b>
+		                 </span>
+                    </th>
+                  </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="row mt-3 justify-content-center">
+            <div class="col-sm-5 mb-1">
+              <button class="btn btn-primary"
+                      onclick="functionOperation(this, false)" id="armFunction" data-functionid="3058"
+                      data-functionname="Охрана Перемещения" data-operation="delayed_arm">Поставить<br>на охрану
+              </button>
+            </div>
+            <div class="col-sm-5 mb-1">
+              <button class="btn btn-primary"
+                      onclick="functionOperation(this, false)" id="disarmFunction" data-functionid="3058"
+                      data-functionname="Охрана Перемещения" data-operation="disarm">Снять<br>с охраны
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row mb-4">
+            <div class="col-sm h-50">
+
+            </div>
+          </div>
+        </div>
+
+        <div class="cblocks">
+          <div class="row py-3 mx-4 cblock bg-head" style="flex-wrap:nowrap;">
+
+            <div class=" text-left pl-4" style="min-width:110px;max-width:110px; flex-grow:0;flex-shrink:0;">Время</div>
+            <div class=" border-1 border-left border-right text-center"
+                 style="min-width:70px;max-width:70px;flex-grow:0;flex-shrink:0;">Тип
+            </div>
+            <div class="text-center border-right" style="flex-grow:5;flex-shrink:5;">Описание события</div>
+            <div class=" text-center" style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">Пользователь
+            </div>
+          </div>
+          <script>
+            var lastLoadedDate = Number.MAX_SAFE_INTEGER;
+            var loadedForLastDate = 0;
+            var lastLoadedTime = Number.MAX_SAFE_INTEGER;
+            var _offset = 0;
+            var _lock = false;
+            $(function () {
+              loadNext();
+            });
+            $(window).scroll(function () {
+              if ($(window).scrollTop() + $(window).height() + 400 >= $(document).height()) {
+                if (_offset == -1)
+                  return;
+                if (_lock)
+                  return;
+                loadNext();
+              }
+            });
+
+            function displayNext(data) {
+              _offset = data.getFunctionActions.offset;
+              if (_offset != -1) {
+                data.getFunctionActions.events.forEach(
+                  function (item) {
+                    doTpl(item, 'decstream_cp/Views/mainPartials/organizations/listItems/actionItem.tpl', '#displayBlock', true);
+                  }
+                );
+              }
+              _lock = false;
+            }
+
+            function loadNext() {
+              _lock = true;
+              rcmsQuery('devices/functionevents/' + filterUrl, {
+                offset: _offset,
+                func_id: 3058,
+                device_id: 1208
+              }, displayNext, null);
+            }
+          </script>
+        </div>
+
+
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>18.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">21:35:40</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">21:35:35</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">21:35:03</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">21:34:56</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>17.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">17:25:55</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">17:22:55</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:28:55</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">14:48:54</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">12:03:48</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>16.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:26:29</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:21:47</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>15.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:28:46</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>10.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">20:51:50</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">20:51:00</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">17:49:23</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">17:48:55</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:19:47</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:17:49</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:15:18</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:12:55</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>10.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:10:54</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>09.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:30:46</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>07.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">17:33:07</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">12:17:10</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">12:07:01</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">12:06:06</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">12:05:29</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">12:00:23</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:59:52</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:54:59</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:49:29</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:42:24</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:41:47</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:33:32</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">11:26:08</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>06.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:07:09</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:06:05</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:06:00</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:05:17</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">16:04:15</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <div class="row justify-content-md-center py-2 mt-4 mx-4 cblock"><b>06.09.2021</b></div>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:56:27</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:55:12</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:53:26</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:46:50</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:41:37</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:34:30</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:25:40</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:24:35</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:23:43</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:23:39</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:22:47</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:21:21</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:11:15</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:10:23</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:09:39</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:09:10</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Снято с охраны">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Снято с охраны 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:08:41</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:07:24</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+        <a href="javascript:;">
+
+          <div class="row py-3 mx-4 cblock" style="line-height: 1.9;flex-wrap:nowrap;">
+
+            <div class="pt-2 text-left pl-4" style="max-width:110px;min-width:110px;flex-grow:0;flex-shrink:0;">
+              <div class="">15:02:12</div>
+            </div>
+            <div class="pt-2 border-1 border-left border-right"
+                 style="max-width:70px;min-width:70px;flex-grow:0;flex-shrink:0;">
+              <img style="max-width: 41px; max-height: 41px;" src="./decstream_cp/public/images/icons/station.svg"
+                   title="Поставлено на охрану">
+            </div>
+            <div class="text-center pt-2" style="flex-grow:5;flex-shrink:5;">
+              <div class="">Поставлено на охрану 'UM0101 1208' ('Охрана Перемещения')</div>
+            </div>
+            <div class="pt-2 text-center border-left"
+                 style="min-width:200px;max-width:200px;flex-grow:0;flex-shrink:0;">
+              <div class=""></div>
+            </div>
+          </div>
+
+        </a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="dcontainer spinnerOverlay" style="display: none;">
+  <div class="spinner"></div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="./decstream_cp/public/js/jquery.datetimepicker.full.min.js"></script>
+<script src="./decstream_cp/public/js/bootstrap.js"></script>
+<script>
+  jQuery(document).ready(function ($) {
+    template.enable();
+  });
+  $(function () {
+    template.postProcessing = function () {
+
+    };
+    template.postProcessing();
+    subscribe();
+
+  });
+  template.version = 'test';
+
+  $(document).ready(function () {
+    $(".navbar-toggler").click(function (event) {
+      $(".navbar-collapse").collapse('hide');
+    });
+  });
+</script>
+
+<div style="display:block; width:100%;height:5px;position:fixed;top:-12px;left:0;z-index:3000;" id="progressBar"></div>
+
+
+<div class="offline-ui offline-ui-up">
+  <div class="offline-ui-content"></div>
+  <a href="" class="offline-ui-retry"></a></div>
+<div id="chromeperfectpixel-panel-container" class="chromeperfectpixel-panel-container"
+     style="color: initial; font: initial; font-feature-settings: initial; font-kerning: initial; font-optical-sizing: initial; font-variation-settings: initial; forced-color-adjust: initial; text-orientation: initial; text-rendering: initial; -webkit-font-smoothing: initial; -webkit-locale: initial; -webkit-text-orientation: initial; -webkit-writing-mode: initial; writing-mode: initial; zoom: initial; place-content: initial; place-items: initial; place-self: initial; alignment-baseline: initial; animation: initial; appearance: initial; aspect-ratio: initial; backdrop-filter: initial; backface-visibility: initial; background: initial; background-blend-mode: initial; baseline-shift: initial; block-size: initial; border-block: initial; border: initial; border-radius: initial; border-collapse: initial; border-end-end-radius: initial; border-end-start-radius: initial; border-inline: initial; border-start-end-radius: initial; border-start-start-radius: initial; inset: initial; box-shadow: initial; box-sizing: initial; break-after: initial; break-before: initial; break-inside: initial; buffered-rendering: initial; caption-side: initial; caret-color: initial; clear: initial; clip: initial; clip-path: initial; clip-rule: initial; color-interpolation: initial; color-interpolation-filters: initial; color-rendering: initial; color-scheme: initial; columns: initial; column-fill: initial; gap: initial; column-rule: initial; column-span: initial; contain: initial; contain-intrinsic-size: initial; content: initial; content-visibility: initial; counter-increment: initial; counter-reset: initial; counter-set: initial; cursor: initial; cx: initial; cy: initial; d: initial; display: initial; dominant-baseline: initial; empty-cells: initial; fill: initial; fill-opacity: initial; fill-rule: initial; filter: initial; flex: initial; flex-flow: initial; float: initial; flood-color: initial; flood-opacity: initial; grid: initial; grid-area: initial; height: initial; hyphens: initial; image-orientation: initial; image-rendering: initial; inline-size: initial; inset-block: initial; inset-inline: initial; isolation: initial; letter-spacing: initial; lighting-color: initial; line-break: initial; list-style: initial; margin-block: initial; margin: initial; margin-inline: initial; marker: initial; mask: initial; mask-type: initial; max-block-size: initial; max-height: initial; max-inline-size: initial; max-width: initial; min-block-size: initial; min-height: initial; min-inline-size: initial; min-width: initial; mix-blend-mode: initial; object-fit: initial; object-position: initial; offset: initial; opacity: initial; order: initial; origin-trial-test-property: initial; orphans: initial; outline: initial; outline-offset: initial; overflow-anchor: initial; overflow-clip-margin: initial; overflow-wrap: initial; overflow: initial; overscroll-behavior-block: initial; overscroll-behavior-inline: initial; overscroll-behavior: initial; padding-block: initial; padding: initial; padding-inline: initial; page: initial; page-orientation: initial; paint-order: initial; perspective: initial; perspective-origin: initial; pointer-events: initial; position: initial; quotes: initial; r: initial; resize: initial; ruby-position: initial; rx: initial; ry: initial; scroll-behavior: initial; scroll-margin-block: initial; scroll-margin: initial; scroll-margin-inline: initial; scroll-padding-block: initial; scroll-padding: initial; scroll-padding-inline: initial; scroll-snap-align: initial; scroll-snap-stop: initial; scroll-snap-type: initial; shape-image-threshold: initial; shape-margin: initial; shape-outside: initial; shape-rendering: initial; size: initial; speak: initial; stop-color: initial; stop-opacity: initial; stroke: initial; stroke-dasharray: initial; stroke-dashoffset: initial; stroke-linecap: initial; stroke-linejoin: initial; stroke-miterlimit: initial; stroke-opacity: initial; stroke-width: initial; tab-size: initial; table-layout: initial; text-align: initial; text-align-last: initial; text-anchor: initial; text-combine-upright: initial; text-decoration: initial; text-decoration-skip-ink: initial; text-indent: initial; text-overflow: initial; text-shadow: initial; text-size-adjust: initial; text-transform: initial; text-underline-offset: initial; text-underline-position: initial; touch-action: initial; transform: initial; transform-box: initial; transform-origin: initial; transform-style: initial; transition: initial; user-select: initial; vector-effect: initial; vertical-align: initial; visibility: initial; -webkit-app-region: initial; border-spacing: initial; -webkit-border-image: initial; -webkit-box-align: initial; -webkit-box-decoration-break: initial; -webkit-box-direction: initial; -webkit-box-flex: initial; -webkit-box-ordinal-group: initial; -webkit-box-orient: initial; -webkit-box-pack: initial; -webkit-box-reflect: initial; -webkit-highlight: initial; -webkit-hyphenate-character: initial; -webkit-line-break: initial; -webkit-line-clamp: initial; -webkit-mask-box-image: initial; -webkit-mask: initial; -webkit-mask-composite: initial; -webkit-perspective-origin-x: initial; -webkit-perspective-origin-y: initial; -webkit-print-color-adjust: initial; -webkit-rtl-ordering: initial; -webkit-ruby-position: initial; -webkit-tap-highlight-color: initial; -webkit-text-combine: initial; -webkit-text-decorations-in-effect: initial; -webkit-text-emphasis: initial; -webkit-text-emphasis-position: initial; -webkit-text-fill-color: initial; -webkit-text-security: initial; -webkit-text-stroke: initial; -webkit-transform-origin-x: initial; -webkit-transform-origin-y: initial; -webkit-transform-origin-z: initial; -webkit-user-drag: initial; -webkit-user-modify: initial; white-space: initial; widows: initial; width: initial; will-change: initial; word-break: initial; word-spacing: initial; x: initial; y: initial; z-index: 2147483647 !important;">
+  <div class="draggable-wrapper">
+    <div class="chromeperfectpixel-panel attached-right attached-top chromeperfectpixel-locale-ru"
+         id="chromeperfectpixel-panel"
+         style="transition: max-height 0.3s linear 0s; right: 0px; top: 0px; display: none;">
+      <div class="chromeperfectpixel-panel-wrapper">
+        <div class="chromeperfectpixel-panel-header">
+          <button class="chromeperfectpixel-button-collapse chromeperfectpixel-button" title="">−</button>
+          <h1 class="chromeperfectpixel-title-container"
+              style="background-image: url(&quot;chrome-extension://dkaagdgjmgdmbnecmcefdhjekcoceebi/assets/images/logo_32px.png&quot;);"></h1>
+          <div class="chromeperfectpixel-dropdown">
+            <button class="chromeperfectpixel-button-menu chromeperfectpixel-button"
+                    style="background-image: url(&quot;chrome-extension://dkaagdgjmgdmbnecmcefdhjekcoceebi/assets/images/icons/menu.svg&quot;);"></button>
+            <div class="chromeperfectpixel-dropdown-body">
+              <div class="chromeperfectpixel-dropdown-content">
+                <ul>
+                  <li>Настройки</li>
+                  <li>Сообщить об ошибке</li>
+                  <li>Обновить до PRO</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chromeperfectpixel-panel-body">
+          <div class="chromeperfectpixel-dropimage-wrapper" tabindex="0">
+            <div class="chromeperfectpixel-addimage">
+              <div class="chromeperfectpixel-addimage-icon"
+                   style="background-image: url(&quot;chrome-extension://dkaagdgjmgdmbnecmcefdhjekcoceebi/assets/images/icons/add-image.svg&quot;);"></div>
+              <button
+                class="chromeperfectpixel-button-wide chromeperfectpixel-addimage-button chromeperfectpixel-button">
+                Добавьте ваш первый слой!
+              </button>
+              <div class="chromeperfectpixel-addimage-text-wrapper">
+                <div class="chromeperfectpixel-addimage-text">или перетащите изображения<br>или&nbsp;<div
+                  class="chromeperfectpixel-addimage-link">вставьте из буфера обмена
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="chromeperfectpixel-panel-ads"><h2 class="chromeperfectpixel-title">При поддержке:</h2>
+              <h2 class="chromeperfectpixel-title chromeperfectpixel-title-dark chromeperfectpixel-title--disable-ads">
+                Обновить до PRO</h2>
+              <div class="chromeperfectpixel-panel-ads-container">
+                <iframe name="chromeperfectpixel-ad-window" sandbox="allow-scripts allow-popups"
+                        referrerpolicy="no-referrer" srcdoc="
+		<html id=&quot;chromeperfectpixel-sponsored&quot;>
+			<head>
+			<base target=&quot;_blank&quot; />
+			<script>
+				window.PP_postMessage = function(type, value) {
+					parent.postMessage({ [&quot;PP_a55bb4a8-caa1-46c3-8f0c-97e77eaf754d_&quot; + type]: value }, &quot;*&quot;);
+				};
+				window.PP_postMessage(&quot;ad_loaded&quot;, { url: &quot;https://draculatheme.com/pro/?a=286553203&quot; });
+
+				function linkClick() {
+					window.PP_postMessage(&quot;action&quot;, { url: &quot;https://draculatheme.com/pro/?a=286553203&quot; });
+					return false;
+				}
+			</script>
+			<link href=&quot;chrome-extension://dkaagdgjmgdmbnecmcefdhjekcoceebi/styles/content.css&quot; type=&quot;text/css&quot; rel=&quot;stylesheet&quot;/>
+			</head>
+			<body>
+				<div id=&quot;carbonads&quot;>
+				    <span>
+				        <a class=&quot;carbon-img&quot; href=&quot;javascript:;&quot; onclick=&quot;return linkClick();&quot;><img src=&quot;https://s3-eu-west-1.amazonaws.com/www.welldonecode.com/perfectpixel/data/dracula-270x210.jpg&quot; alt=&quot;&quot; border=&quot;0&quot; height=&quot;100&quot; width=&quot;130&quot; style=&quot;max-width: 130px;&quot; /></a>
+				    <a class=&quot;carbon-text&quot; href=&quot;javascript:;&quot; onclick=&quot;return linkClick();&quot;>Dracula PRO - Best Dark Theme for Developers and Designers</a></span>
+				    <a class=&quot;carbon-poweredby&quot; href=&quot;javascript:;&quot; onclick=&quot;return linkClick();&quot;>Get it</a>
+				 </div>
+			</body>
+		</html>
+	"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="chromeperfectpixel-fileUploader-container"><input type="file" accept="image/*" multiple=""
+                                                                       class="chromeperfectpixel-fileUploader"></span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

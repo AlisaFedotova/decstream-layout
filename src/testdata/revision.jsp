@@ -1,0 +1,2 @@
+<html><head></head><body>altair:36-news:132270<br>webserver:36-news:132270<br>sm:36-news:36.0.1.131141:131141<br>win32:ygs:Launcher 32.0.0.19563  Client 36.0.0.20467:1146<br>mobile:ygs:36.28:1146<br>html5casinos:ygs:4.28:1146<br>html5desktop:ygs:36.31:1146<br>html5mobile:ygs:36.31:1146<br>html5electron:ygs:36.31:1146<br>html5win:ygs:36.31:1146<br>html5android:ygs:cordova.18:1146<br>mobile:ygs2:undefined:1146<br>fuga::541<br>
+</body></html>

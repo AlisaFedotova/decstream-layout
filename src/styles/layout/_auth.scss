@@ -1,0 +1,47 @@
+body.auth {
+    background: #fff;
+}
+
+.auth-container {
+  align-items: center;
+
+  .auth-col {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-bg {
+    text-align: center;
+  }
+
+  .logo {
+    text-align: center;
+  }
+}
+
+.auth-form {
+  max-width: 350px;
+
+  button:first-of-type {
+    margin-top: 2.5rem;
+  }
+}
+
+.form-text {
+  display: none;
+}
+
+.form-control.error ~ .form-text {
+  display: block;
+}
+
+@media (max-width: $md-screen) {
+  .auth-col:first-child {
+    height: 15vh;
+  }
+
+  .auth-col:nth-child(2) {
+    height: 100vh - 15vh;
+  }
+}
