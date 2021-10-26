@@ -12,7 +12,7 @@
   </div>
 </div>
 <script>
-  window.onload = function (){
+  window.onload = function () {
     let spinner = document.querySelector('#page-spinner');
     spinner.style = 'display:none';
   }
@@ -167,26 +167,6 @@
             </a>
           </div>
         </div>
-        <div class="col">
-          <div class="meter-card data-state data-state-MISSING">
-            <a class="stretched-link" href="./?/?group=4176">
-              <img title="Водосчетчик" class="meter-card-type"
-                   src="./decstream_cp/public/images/icons/devices/WATER_COUNTER.svg">
-              <div class="meter-card-name">
-                <span class="card-title">Вега СИ-12 514</span>
-                <span class="card-subtitle">Водосчётчик</span>
-              </div>
-              <div class="meter-card-value">
-                <span>301,49 м³</span>
-                <span>Показания</span>
-              </div>
-              <div class="meter-card-consumption">
-                <span>100,05 м³</span>
-                <span>Расход за месяц</span>
-              </div>
-            </a>
-          </div>
-        </div>
       </div>
       <div class="col-3">
         <div class="col">
@@ -216,10 +196,10 @@
           </div>
         </div>
         <div class="col">
-          <div class="ticket" onclick="editInvite('nik+ds@very-soft.com', 10, 'MANAGER');"
+          <div class="ticket" onclick="editInvite('abc+ds@email.com', 10, 'MANAGER');"
                style="cursor: pointer; width: 327px">
             <div class="ticket-body">
-              <span class="ticket-title">nik+ds@very-soft.com</span>
+              <span class="ticket-title">abc+ds@email.com</span>
               <div class="ticket-item">
                 <span class="ticket-item-title">Устарело</span>
                 <span class="ticket-item-subtitle">СТАТУС</span>
@@ -237,10 +217,10 @@
               >
             </div>
           </div>
-          <div class="ticket" onclick="editInvite('nik+ds@very-soft.com', 10, 'MANAGER');"
+          <div class="ticket data-state data-state-MISSING" onclick="editInvite('abc+ds@email.com', 10, 'MANAGER');"
                style="cursor: pointer; width: 327px">
             <div class="ticket-body">
-              <span class="ticket-title">nik+ds@very-soft.com</span>
+              <span class="ticket-title">abc+ds@email.com</span>
               <div class="ticket-item">
                 <span class="ticket-item-title">Устарело</span>
                 <span class="ticket-item-subtitle">Статус</span>
@@ -258,7 +238,7 @@
               >
             </div>
           </div>
-          <div class="ticket triangle_exclamation" onclick="location.href='./?/organization/groups/?group=4176'"
+          <div class="ticket data-state data-state-DELAY" onclick="location.href='./?/organization/groups/?group=4176'"
                style="cursor:pointer;">
             <div class="ticket-body">
               <div class="ticket-title-block">
@@ -268,6 +248,27 @@
             </div>
             <div class="ticket-transition">
               <img src="./decstream_cp/public/images/arrow-forth.svg">
+            </div>
+          </div>
+          <div class="ticket data-state data-state-ERROR" onclick="editInvite('abc+ds@email.com', 10, 'MANAGER');"
+               style="cursor: pointer; width: 327px">
+            <div class="ticket-body">
+              <span class="ticket-title">abc+ds@email.com</span>
+              <div class="ticket-item">
+                <span class="ticket-item-title">Устарело</span>
+                <span class="ticket-item-subtitle">СТАТУС</span>
+              </div>
+              <div class="ticket-item">
+                <span class="ticket-item-title">28-11-2019 19:06:46</span>
+                <span class="ticket-item-subtitle">Выдано</span>
+              </div>
+              <div class="ticket-item">
+                <span class="ticket-item-title">Менеджер</span>
+                <span class="ticket-item-subtitle">Роль</span>
+              </div>
+            </div>
+            <div class="ticket-transition">
+              >
             </div>
           </div>
         </div>
@@ -491,10 +492,99 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid">
+  <div class="container-fluid mb-4 mt-4">
     <div class="row">
-      <div class="col-3"></div>
-      <div class="col-3"></div>
+      <div class="col-3">
+        <div class="meter-card data-state data-state-NORMAL">
+          <a class="stretched-link" href="./?/?graph=4718">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
+                 fill="#5E79AA">
+              <path
+                d="M1695.525 2693.506c.102-.28.459-.506.798-.506h7.293c.339 0 .508.224.381.494l-3.795 8.08c-.128.273.045.494.378.494h6.082c.336 0 .44.186.226.42l-12.699 13.916c-.84.92-1.19.756-.784-.364l3.34-9.2c.1-.279-.095-.504-.424-.504h-4.873c-.335 0-.521-.232-.42-.507l4.497-12.323z"
+                transform="translate(-1691 -2693)"></path>
+            </svg>
+            <div class="meter-card-name">
+              <span class="card-title">asad</span>
+              <span class="card-subtitle">Электросчётчик</span>
+            </div>
+            <div class="meter-card-value">
+              <span class="card-title">59970 кВт*ч</span>
+              <span class="card-subtitle">Показания</span>
+            </div>
+            <div class="meter-card-consumption">
+              <span class="card-title">59970 кВт*ч</span>
+              <span class="card-subtitle">Расход за месяц</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="meter-card data-state data-state-MISSING">
+          <a class="stretched-link" href="./?/?graph=4718">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
+                 fill="#5E79AA">
+              <path
+                d="M1695.525 2693.506c.102-.28.459-.506.798-.506h7.293c.339 0 .508.224.381.494l-3.795 8.08c-.128.273.045.494.378.494h6.082c.336 0 .44.186.226.42l-12.699 13.916c-.84.92-1.19.756-.784-.364l3.34-9.2c.1-.279-.095-.504-.424-.504h-4.873c-.335 0-.521-.232-.42-.507l4.497-12.323z"
+                transform="translate(-1691 -2693)"></path>
+            </svg>
+            <div class="meter-card-name">
+              <span class="card-title">asad</span>
+              <span class="card-subtitle">Электросчётчик</span>
+            </div>
+            <div class="meter-card-value">
+              <span class="card-title">59970 кВт*ч</span>
+              <span class="card-subtitle">Показания</span>
+            </div>
+            <div class="meter-card-consumption">
+              <span class="card-title">59970 кВт*ч</span>
+              <span class="card-subtitle">Расход за месяц</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="meter-card data-state data-state-DELAY">
+          <a class="stretched-link" href="./?/?graph=4718">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
+                 fill="#5E79AA">
+              <path
+                d="M1695.525 2693.506c.102-.28.459-.506.798-.506h7.293c.339 0 .508.224.381.494l-3.795 8.08c-.128.273.045.494.378.494h6.082c.336 0 .44.186.226.42l-12.699 13.916c-.84.92-1.19.756-.784-.364l3.34-9.2c.1-.279-.095-.504-.424-.504h-4.873c-.335 0-.521-.232-.42-.507l4.497-12.323z"
+                transform="translate(-1691 -2693)"></path>
+            </svg>
+            <div class="meter-card-name">
+              <span class="card-title">asad</span>
+              <span class="card-subtitle">Электросчётчик</span>
+            </div>
+            <div class="meter-card-value">
+              <span class="card-title">59970 кВт*ч</span>
+              <span class="card-subtitle">Показания</span>
+            </div>
+            <div class="meter-card-consumption">
+              <span class="card-title">59970 кВт*ч</span>
+              <span class="card-subtitle">Расход за месяц</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="meter-card data-state data-state-ERROR">
+          <a class="stretched-link" href="./?/?graph=4718">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
+                 fill="#5E79AA">
+              <path
+                d="M1695.525 2693.506c.102-.28.459-.506.798-.506h7.293c.339 0 .508.224.381.494l-3.795 8.08c-.128.273.045.494.378.494h6.082c.336 0 .44.186.226.42l-12.699 13.916c-.84.92-1.19.756-.784-.364l3.34-9.2c.1-.279-.095-.504-.424-.504h-4.873c-.335 0-.521-.232-.42-.507l4.497-12.323z"
+                transform="translate(-1691 -2693)"></path>
+            </svg>
+            <div class="meter-card-name">
+              <span class="card-title">asad</span>
+              <span class="card-subtitle">Электросчётчик</span>
+            </div>
+            <div class="meter-card-consumption">
+              <span class="card-title">Ошибка!</span>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
   <div class="container-fluid">
@@ -513,17 +603,21 @@
             </tr>
             </thead>
             <tbody>
+            <tr onclick="editInvite('abcabcabc+6@gmail.com', 234, 'MANAGER');" style="cursor:pointer;">
+              <td class="usermobtable1 nowrap">
+                <div class="td-fixwidth">
+                  abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc+6@gmail.com
+                </div>
+              </td>
+              <td class="usermobtable2">Устарело</td>
+              <td class="usermobtable3">14-12-2020 15:16:11</td>
+              <td class="usermobtable2">Менеджер</td>
+              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
+            </tr>
             <tr onclick="editInvite('abcabcabc+5@gmail.com', 233, 'MANAGER');" style="cursor:pointer;">
               <td class="usermobtable1 nowrap">abcabcabc+5@gmail.com</td>
               <td class="usermobtable2">Устарело</td>
               <td class="usermobtable3">14-12-2020 15:11:13</td>
-              <td class="usermobtable2">Менеджер</td>
-              <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
-            </tr>
-            <tr onclick="editInvite('abcabcabc+6@gmail.com', 234, 'MANAGER');" style="cursor:pointer;">
-              <td class="usermobtable1 nowrap"><div class="td-fixwidth">abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc+6@gmail.com</div></td>
-              <td class="usermobtable2">Устарело</td>
-              <td class="usermobtable3">14-12-2020 15:16:11</td>
               <td class="usermobtable2">Менеджер</td>
               <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
             </tr>
@@ -578,7 +672,7 @@
             </tr>
             <tr>
               <td>E-mail</td>
-              <td>dectest01@very-soft.com</td>
+              <td>dectest01@email.com</td>
             </tr>
             <tr>
               <td>Назначенная роль</td>
@@ -930,7 +1024,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-role="link" data-href="./?/organization/groups/?group=4176" class="bg-warning"
+            <tr data-role="link" data-href="./?/organization/groups/?group=4176" class="data-state data-state-MISSING"
                 style="cursor: pointer;">
               <td class="pr-0">
                 <img class="deviceIcon" src="/src/images/folder.svg">
@@ -941,7 +1035,7 @@
               <td></td>
               <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
             </tr>
-            <tr data-role="link" data-href="./?/organization/groups/?group=4177" class="" style="cursor: pointer;">
+            <tr data-role="link" data-href="./?/organization/groups/?group=4177" class="data-state data-state-DELAY" style="cursor: pointer;">
               <td class="pr-0">
                 <img class="deviceIcon" src="src/images/folder.svg">
               </td>
@@ -951,7 +1045,7 @@
               <td></td>
               <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
             </tr>
-            <tr data-role="link" data-href="./?/devices/info/?id=625" style="cursor: pointer;">
+            <tr data-role="link" data-href="./?/devices/info/?id=625" class="data-state data-state-ERROR" style="cursor: pointer;">
               <td>
                 <span class="mask2line bg-success"></span>
                 <span>
@@ -987,7 +1081,6 @@
               </td>
               <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
             </tr>
-
             </tbody>
           </table>
         </div>
@@ -1079,6 +1172,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3"></div>
     </div>
   </div>
   <form class="primary-block row">
@@ -1123,7 +1219,11 @@
     </div>
   </form>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
 </body>
 </html>

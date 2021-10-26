@@ -13,6 +13,7 @@ $ticket-text-gap: 24px;
   background: $ticket-bg;
   border-radius: $ticket-border-radius;
   box-shadow: 0 0 8px 0 rgb(0 0 0 / 5%);
+  overflow: hidden;
 
   &-body {
     display: flex;
@@ -69,6 +70,13 @@ $ticket-text-gap: 24px;
       bottom: 24px;
     }
   }
+
+  &.data-state-ERROR {
+    .ticket-item-subtitle {
+      color: #f2f4f7;
+      opacity: 0.5;
+    }
+  }
 }
 
 .ticket.red_cross {
@@ -86,7 +94,7 @@ $ticket-text-gap: 24px;
   }
 }
 
-.ticket.triangle_exclamation {
+.ticket.triangle_exclamation { //data-state-MISSING
   position: relative;
 
   &:after {

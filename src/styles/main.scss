@@ -112,7 +112,6 @@ body {
 
     &__wrapper {
       padding: 0 $main-content-offset-md;
-      margin-bottom: 40px;
     }
   }
   header.right-part {
@@ -303,5 +302,36 @@ h2 {
 @media (min-width: $md-screen) {
   .titles-filter select {
     width: 273px;
+  }
+}
+
+.data-state {
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0 0 10px 0;
+    height: 100%;
+    width: 8px;
+  }
+
+  &-MISSING:after {
+    background-color: #de5c62;
+  }
+
+  &-DELAY:after {
+    background-color: #eab940;
+  }
+
+  &-ERROR {
+    background: #de5c62;
+    color: #fff;
+
+    img {
+      filter: brightness(100);
+    }
   }
 }

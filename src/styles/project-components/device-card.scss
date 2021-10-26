@@ -4,6 +4,7 @@ $group-card-border-radius: 4px;
 .group-card {
   position: relative;
   height: 183px;
+  max-width: 332px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -59,15 +60,28 @@ $group-card-border-radius: 4px;
 }
 
 .meter-card { //metering device card
-  position: relative;
+  //position: relative;
   height: 100%;
+  max-width: 332px;
   background-color: #fff;
   padding: 24px 24px 16px 24px;
   border-radius: $group-card-border-radius;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05), 0 2px 10px 0 rgba(0, 0, 0, 0.03);
+  overflow: hidden;
 
   &:hover {
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05), 0 2px 24px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  .card-subtitle {
+    display: block;
+    font-size: 0.85rem;
+    color: #9ea1a3;
+    text-transform: lowercase;
+
+    &:first-letter {
+      text-transform: capitalize;
+    }
   }
 
   .stretched-link {
@@ -91,36 +105,13 @@ $group-card-border-radius: 4px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
-    .card-subtitle {
-      display: block;
-      font-size: 0.85rem;
-      color: #9ea1a3;
-      text-transform: lowercase;
-
-      &:first-letter {
-        text-transform: capitalize;
-      }
-    }
   }
 
   &-value {
     margin-bottom: 12px;
 
-    span:first-child {
+    .card-title {
       font-weight: 700;
-    }
-
-    span + span {
-      display: block;
-      font-size: 0.85rem;
-      color: #9ea1a3;
-      margin-top: 4px;
-      text-transform: lowercase;
-
-      &:first-letter {
-        text-transform: capitalize;
-      }
     }
   }
 
@@ -131,11 +122,15 @@ $group-card-border-radius: 4px;
     border-radius: 4px;
     border: 1px solid #353738;
 
-    span:first-child {
+    .card-title {
       display: block;
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 800;
       line-height: 2rem;
+    }
+
+    .card-subtitle {
+      color: #353738;
     }
   }
 
@@ -147,29 +142,19 @@ $group-card-border-radius: 4px;
     height: 32px;
     z-index: 9;
   }
-}
 
-.data-state {
-  &:after {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 4px;
-    padding: 0 0 10px 0;
-    height: calc(100% - 8px); //top and bottom offsets are 4px
-    width: 2px;
-    border-radius: 1px;
-  }
+  &.data-state-ERROR {
+    .stretched-link {
+      color: #fff;
+    }
 
-  &-MISSING:after {
-    background-color: #de5c62;
-  }
+    .card-subtitle {
+      color: #f2f4f7;
+      opacity: 0.5;
+    }
 
-  &-DELAY:after {
-    background-color: #eab940;
-  }
-
-  &-ERROR:after {
-    //background-color: #868686;
+    .meter-card-consumption {
+      border: none;
+    }
   }
 }
