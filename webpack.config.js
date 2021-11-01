@@ -111,6 +111,14 @@ module.exports = (env, argv) => {
           template: 'src/spinner.html',
           filename: 'spinner.html'
         }),
+        new HtmlWebpackPlugin({
+          template: 'src/devices.html',
+          filename: 'devices.html'
+        }),
+        new HtmlWebpackPlugin({
+          template: 'src/device.html',
+          filename: 'device.html'
+        }),
         new MiniCssExtractPlugin({
           filename: 'style-[contenthash].min.css',
         }),

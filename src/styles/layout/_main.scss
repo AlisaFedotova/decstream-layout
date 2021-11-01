@@ -1,12 +1,33 @@
 .primary-block { //wrapper for block in the top of the inner pages. For filtration buttons and other
   margin-bottom: 40px;
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
 
-  .btn-primary {
+  .btn-primary:not(.btn-round) {
     max-width: 273px;
     width: 100%;
+  }
+}
+
+@media (max-width: $md-screen) {//to easily swap child's order in mobile and tablet
+  .t-order-0 {
+    order: 0;
+  }
+
+  .t-order-1 {
+    order: 1;
+  }
+}
+
+@media (max-width: $sm-screen) {
+  .m-order-0 {
+    order: 0;
+  }
+
+  .m-order-1 {
+    order: 1;
   }
 }
 

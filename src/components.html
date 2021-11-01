@@ -1089,7 +1089,7 @@
   </div>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         <div class="modal fade" id="addOrgModal" tabindex="-1" role="dialog"
              aria-hidden="true" style="display: block;opacity: 1;position: static;">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1140,7 +1140,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <div class="modal fade" id="addOrgModal1" tabindex="-1" role="dialog"
              aria-hidden="true" style="display: block;opacity: 1;position: static;">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1161,6 +1161,120 @@
                 <button class="btn btn-primary w-100 mb-4" onclick="console.log('click')">
                   <span>Прибор учёта</span>
                   <span>с импульсным выходом</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="modal fade show" id="deviceParentModal" tabindex="-1" role="dialog"
+             style="padding-right: 14px; display: block; position: static" aria-modal="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title" id="editDeviceModalTitle">Родительская группа</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="btn-close"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div id="groupParentsTree2" data-type="tree" data-guid="0b6a60c9-28e9-73b7-f8ae-0596744069e8"
+                     class="gj-unselectable gj-tree-bootstrap-4">
+                  <ul class="gj-list gj-list-bootstrap">
+                    <li data-id="10" data-role="node" class="list-group-item">
+                      <div data-role="wrapper"><span data-role="spacer" style="width: 0px;"></span><span
+                        data-role="expander" data-mode="open" class="gj-tree-material-icons-expander"><i
+                        class="fa fa-minus"></i></span><span data-role="display">группа</span></div>
+                      <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;">
+                        <li data-id="5002" data-role="node" class="list-group-item" data-selected="true">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">111</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5016" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">123</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5017" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">123</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5003" data-role="node" class="list-group-item active" data-selected="true">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">12331</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="4176" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">23121323</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="4938" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbccccc</span>
+                          </div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5008" data-role="node" class="list-group-item active">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">bvcxbnbmc</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5007" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">fgffghf</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5004" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">sdgsa</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5009" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">vbnvgftgjn</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5006" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">zvcnbz</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="3646" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">Группа N</span></div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                        <li data-id="5005" data-role="node" class="list-group-item">
+                          <div data-role="wrapper"><span data-role="spacer" style="width: 24px;"></span><span
+                            data-role="expander" data-mode="close" class="gj-tree-material-icons-expander"><i
+                            class="fa fa-plus"></i></span><span data-role="display">Группа с очень очень очень очень очень ооочень длинным названием</span>
+                          </div>
+                          <ul class="gj-list gj-list-bootstrap gj-hidden" style="display: block;"></ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <button type="button" onclick="saveDeviceParent();" style="" id="moveCompleteButton"
+                        class="btn btn-primary w-100 mt-40">
+                  <span>ПЕРЕМЕСТИТЬ</span>
+                  <span id="groupNameButtonText">в группу </span>
                 </button>
               </div>
             </div>
