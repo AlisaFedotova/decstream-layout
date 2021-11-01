@@ -1,0 +1,75 @@
+.modal .gj-tree-bootstrap-4 {
+  margin-left: -$modal-inner-padding-x;
+  margin-right: -$modal-inner-padding-x;
+
+  ul.gj-list-bootstrap li {
+    & [data-role=wrapper] {
+      padding: 0 $modal-inner-padding-x;
+    }
+
+    & [data-role=display] {
+      padding: 12px 0 12px 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+  }
+}
+
+.gj-tree-bootstrap-4 {
+  font-size: 0.85rem;
+
+  ul.gj-list-bootstrap li {
+    font-weight: 500;
+
+    &.active {
+      color: #3b3c3d;
+      font-weight: 600;
+    }
+  }
+
+  .list-group-item {
+    &.active {
+      > [data-role=wrapper] {
+        position: relative;
+        background-color: rgb(226 226 226);
+
+        &:after {
+          content: '';
+          position: absolute;
+          right: 40px;
+          top: calc(100% / 2 - 4px);
+          width: 10px;
+          height: 8px;
+          background-image: escape-svg(url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8"><g fill="#353738" fill-rule="nonzero"><path d="M518.683 459L521 461.352 515.434 467 511 462.2 513.391 459.925 515.509 462.22z" transform="translate(-1467 -2699) translate(956 2240)"/></g></svg>'));
+          background-repeat: no-repeat;
+        }
+      }
+    }
+
+    [data-role=wrapper] {
+      &:hover {
+        background-color: #faf1f2;
+        color: #c94e60;
+      }
+    }
+
+    &:not(.active) {
+      &[data-selected=true] {
+        position: relative;
+
+        &:after {
+          content: '';
+          position: absolute;
+          right: 40px;
+          top: calc(100% / 2 - 4px);
+          width: 10px;
+          height: 8px;
+          background-image: escape-svg(url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8"><g fill="#9a9b9b" fill-rule="nonzero"><path d="M518.683 459L521 461.352 515.434 467 511 462.2 513.391 459.925 515.509 462.22z" transform="translate(-1467 -2699) translate(956 2240)"/></g></svg>'));
+          background-repeat: no-repeat;
+        }
+      }
+    }
+  }
+}
+
