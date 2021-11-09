@@ -29,6 +29,12 @@
   }
 
   .list-group-item {
+    display: block;
+
+    &:hover {
+      background: transparent;
+    }
+
     &.active {
       > [data-role=wrapper] {
         position: relative;

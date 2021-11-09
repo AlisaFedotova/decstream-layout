@@ -23,6 +23,20 @@
       }
     }
   }
+
+  .btn-list {
+    display: flex;
+    flex-direction: column;
+
+    .btn {
+      border-radius: 0;
+      font-size: 1rem;
+
+      &:hover {
+        background: #e9ebee;
+      }
+    }
+  }
 }
 
 @media (max-width: $sm-screen) {

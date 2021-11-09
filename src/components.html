@@ -1285,13 +1285,8 @@
   </div>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-3"></div>
-      <div class="col-3"></div>
-      <div class="col-3"></div>
-      <div class="col-3"></div>
-    </div>
-  </div>
-  <form class="primary-block row">
+      <div class="col">
+        <form class="primary-block row">
     <div class="row col-12 col-md-6">
       <div class="form-group col-6 pr-2 pr-md-3">
         <label class="md-and-lower" for="fromInput">с</label>
@@ -1332,6 +1327,138 @@
       </div>
     </div>
   </form>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <div class="modal fade show" id="addhard" tabindex="-1" role="dialog" aria-modal="true"
+             style="display: block;position: static">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title" id="addDeviceModalTitle">ДОБАВИТЬ ВОДОСЧЁТЧИК</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="btn-close"></span>
+                </button>
+              </div>
+              <div class="modal-body" id="addVirtualDeviceTile" style="pointer-events: auto;">
+                <div id="addVirtualDeviceTypeTile" style="display: none;">
+                  <button class="btn btn-primary w-100 mb-3" onclick="createVirtualDeviceSelectType('WATER_COUNTER')">
+                    Водосчётчик
+                  </button>
+                  <button class="btn btn-primary w-100 mb-3"
+                          onclick="createVirtualDeviceSelectType('ELECTRICITY_COUNTER')">
+                    Электросчётчик
+                  </button>
+                  <button class="btn btn-primary w-100" onclick="createVirtualDeviceSelectType('GAS_COUNTER')">
+                    Газосчётчик
+                  </button>
+                  <button onclick="$('#addVirtualDeviceTypeTile').hide();$('#selectDeviceOrGroup').show();"
+                          class="btn btn-primary w-100 mt-40">Назад
+                  </button>
+                </div>
+                <div id="addVirtualDeviceSelectSource" class="row" style="">
+                  <div class="col-sm">
+                    <ul class="list-group" id="virtualDeviceSelectSource">
+                      <div class="list-group-item"><a onclick="createVirtualDeviceSelectSource(0)"
+                                                      style="cursor: pointer;">Вега СИ-12 6</a></div>
+                      <div class="list-group-item"><a onclick="createVirtualDeviceSelectSource(1)"
+                                                      style="cursor: pointer;">Умка450 v2</a></div>
+                      <div class="list-group-item"><a onclick="createVirtualDeviceSelectSource(2)"
+                                                      style="cursor: pointer;">Сеть 868 UMKa440 146</a></div>
+                      <div class="list-group-item"><a onclick="createVirtualDeviceSelectSource(3)"
+                                                      style="cursor: pointer;">Вега СИ-22 2367</a></div>
+                      <div class="list-group-item"><a onclick="createVirtualDeviceSelectSource(4)"
+                                                      style="cursor: pointer;">Вега СИ-22 2432</a></div>
+                    </ul>
+                    <button onclick="$('#addVirtualDeviceSelectSource').hide();$('#addVirtualDeviceTypeTile').show();"
+                            class="btn btn-primary w-100 mt-40">Назад
+                    </button>
+                  </div>
+                </div>
+                <div id="addVirtualDeviceSelectExit" class="row" style="display:none;">
+                  <div class="col-sm">
+                    <ul id="virtualDeviceSelectSourceExit">
+                    </ul>
+                    <button onclick="$('#addVirtualDeviceSelectExit').hide();$('#addVirtualDeviceSelectSource').show();"
+                            class="btn btn-primary w-100 mt-40">Назад
+                    </button>
+                  </div>
+                </div>
+                <div id="addVirtualDeviceNameAndSerial" style="display:none">
+                  <p>Введите название и серийный номер добавляемого устройства</p>
+                  <div class="form-group">
+                    <label for="addVirtualDeviceNameInput">Название</label>
+                    <input type="text" class="form-control" id="addVirtualDeviceNameInput">
+                  </div>
+                  <div class="form-group">
+                    <label for="addVirtualDeviceSerialInput">Серийный номер</label>
+                    <input type="text" class="form-control" id="addVirtualDeviceSerialInput">
+                  </div>
+                  <div class="row mt-sm-4 btn-line">
+                    <div class="col-sm-6">
+                      <button
+                        onclick="$('#addVirtualDeviceNameAndSerial').hide();$('#addVirtualDeviceSelectExit').show();"
+                        class="btn btn-secondary btn-block">Назад
+                      </button>
+                    </div>
+                    <div class="col-sm-6">
+                      <button class="btn btn-primary btn-block" onclick="createVirtualDeviceToFactor()">
+                        Далее
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="addVirtualDeviceCostAndFactor" style="display:none">
+                  <p>Введите цену одного импульса и текущие показания счетчика</p>
+                  <div class="form-group">
+                    <label for="addVirtualDeviceCostInput">Цена импульса</label>
+                    <input type="number" class="form-control" id="addVirtualDeviceCostInput">
+                  </div>
+                  <div class="form-group">
+                    <label for="addVirtualDeviceFactorInput">Текущие показания</label>
+                    <input type="number" class="form-control" id="addVirtualDeviceFactorInput">
+                  </div>
+                  <div class="form-group" id="addVirtualWaterPurpose" style="display:none;">
+                    <label for="addVirtualDevicePurposeSelect">Назначение</label>
+                    <select class="form-control" id="addVirtualDevicePurposeSelect">
+                      <option value="NONE">Не задано</option>
+                      <option value="COLD_WATER">Холодная вода</option>
+                      <option value="HOT_WATER">Горячая вода</option>
+                    </select>
+                  </div>
+                  <div class="row mt-sm-4 btn-line">
+                    <div class="col-sm-6">
+                      <button
+                        onclick="$('#addVirtualDeviceCostAndFactor').hide();$('#addVirtualDeviceNameAndSerial').show();"
+                        class="btn btn-secondary btn-block">Назад
+                      </button>
+                    </div>
+                    <div class="col-sm-6">
+                      <button class="btn btn-primary btn-block" onclick="createVirtualDeviceFinish()">
+                        Добавить
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+    </div>
+  </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
