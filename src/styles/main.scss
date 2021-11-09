@@ -247,7 +247,7 @@ h2 {
     }
 
     .my-col {
-      min-width: 170px;
+      min-width: auto;
       padding: 0 7px
     }
 
@@ -342,4 +342,14 @@ h2 {
   position: absolute;
   top: 40px;
   left: 40px;
+}
+
+.data-state-message {
+  position: absolute;
+  display: block;
+  width: 16px;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }

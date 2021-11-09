@@ -113,6 +113,9 @@ header {
 
     .breadcrumb-item {
       display: block;
+      max-width: 250px;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &:not(:last-child) {
         display: none;
