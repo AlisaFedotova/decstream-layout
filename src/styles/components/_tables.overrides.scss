@@ -101,13 +101,21 @@ $table-stripped-border-radius: 8px;
     }
   }
 
+  tr.data-state-ERROR {
+    background: transparent;
+  }
+
   .data-state {
     &:after {
       border-radius: 4px 0 0 4px;
     }
 
-    &-ERROR td {
-      background-color: #de5c62;
+    &-ERROR {
+
+
+      td {
+        background-color: #de5c62;
+      }
     }
   }
 }
