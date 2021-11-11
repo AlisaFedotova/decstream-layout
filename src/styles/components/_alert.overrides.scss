@@ -1,6 +1,6 @@
 .alert {
   position: fixed;
-  top: 5px;
+  top: calc(#{$header-height} + 15px);
   left: calc(50% - #{$alert-width} / 2);
   color: white;
   text-align: center;
@@ -22,6 +22,7 @@
 
 @media (max-width: $md-screen) {
   .alert {
+    top: calc(#{$header-height-md} + 15px);
     left: auto;
     max-width: inherit;
     width: calc(100% - 20px);

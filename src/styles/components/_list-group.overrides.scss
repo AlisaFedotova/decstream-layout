@@ -21,7 +21,7 @@
 
   a {
     color: $base-grey;
-    padding: 0.75rem 2.5rem;
+    padding: 0.57rem 2.5rem;
     flex: 1 1 auto;
 
     &:hover {
@@ -31,5 +31,12 @@
 
   &:first-child {
     @include border-top-radius(0);
+  }
+
+  small  {
+    display: block;
+    margin-top: -4px;
+    color: #9ea1a3;
+    font-weight: 300;
   }
 }
