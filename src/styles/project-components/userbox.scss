@@ -24,8 +24,13 @@
       padding: 11px 30px;
     }
   }
-  .list-group{
+
+  .list-group {
     padding-bottom: $modal-inner-padding-y;
+  }
+
+  .list-group-item {
+    min-height: 57px;
   }
 
   .close {
