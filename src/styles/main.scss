@@ -33,7 +33,7 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i&display=swap");
 
 body {
-  //margin-right: calc(-1 * (100vw - 100%)); // to remove changing of content width due to scrollbar
+  margin-right: calc(-1 * (100vw - 100%)); // to remove changing of content width due to scrollbar
 }
 
 .page-content {
@@ -221,7 +221,7 @@ h2 {
   margin-top: 24px;
 }
 
-#graphPeriodForm {
+.filter-form {
   .btn-group .btn {
     width: 160px;
     height: fit-content;
@@ -229,7 +229,7 @@ h2 {
 }
 
 @media (max-width: $md-screen) {
-  #graphPeriodForm {
+  .filter-form {
     margin-bottom: 24px;
 
     .btn-group {
