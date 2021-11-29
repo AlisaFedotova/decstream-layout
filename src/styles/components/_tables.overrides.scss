@@ -145,10 +145,3 @@ $table-stripped-border-radius: 8px;
 .datebox:not(:first-child) {
   margin-top: 40px;
 }
-
-.td-fixwidth {
-  max-width: 400px;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}

@@ -353,3 +353,11 @@ h2 {
   left: 0;
   z-index: 1000;
 }
+
+.string-fixwidth {
+  display: block;
+  max-width: 400px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
