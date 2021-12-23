@@ -8,7 +8,7 @@
     }
 
     & [data-role=display] {
-      padding: 12px 0 12px 10px;
+      padding: 12px 12px 12px 10px;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 200px;
@@ -79,3 +79,9 @@
   }
 }
 
+@media (max-width: $sm-screen) {
+  .modal .gj-tree-bootstrap-4 {
+    margin-left: -$modal-inner-padding-x-sm;
+    margin-right: -$modal-inner-padding-x-sm;
+  }
+}

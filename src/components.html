@@ -101,6 +101,43 @@
       </div>
     </div>
   </div>
+  <div class="container-fluid mt-2 mb-2">
+    <div class="row">
+    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('danger', 'danger')">Show alert danger</button></div>
+    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('success', 'success')">Show alert success</button></div>
+    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('warning', 'warning')">Show alert warning</button></div>
+    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('info', 'info')">Show alert info</button></div>
+    </div>
+    <script>
+      function showAlert(type, text) {
+        let alert = buildAlert(type, text);
+        let parent = document.querySelector('.alert-wrapper');
+        parent.appendChild(alert);
+        window.setTimeout(function () {
+          parent.removeChild(alert);
+        }, 3000);
+      }
+
+      function buildAlert(type, text) {
+        let alertContainer = document.createElement('div')
+        alertContainer.className = 'alert alert-' + type + ' fade show';
+        alertContainer.role = 'alert';
+        alertContainer.id = type + 'Alert';
+        let alertMess = document.createElement('span');
+        if (text) {
+          alertMess.innerText = text;
+        }
+        alertContainer.appendChild(alertMess);
+        let alertClose = document.createElement('button');
+        alertClose.className = 'close';
+        alertClose.type = 'button';
+        alertClose.innerText = '×';
+        alertClose.setAttribute('data-dismiss','alert');
+        alertContainer.appendChild(alertClose);
+        return alertContainer;
+      }
+    </script>
+  </div>
   <div class="container-fluid">
     <div class="row">
       <div class="col-3">
@@ -196,8 +233,7 @@
           </div>
         </div>
         <div class="col">
-          <div class="ticket" onclick="editInvite('abc+ds@email.com', 10, 'MANAGER');"
-               style="cursor: pointer; width: 327px">
+          <div class="ticket" style="cursor: pointer; width: 327px">
             <div class="ticket-body">
               <span class="ticket-title">abc+ds@email.com</span>
               <div class="ticket-item">
@@ -378,38 +414,7 @@
             </ul>
           </nav>
         </div>
-        <div class="col mt-3">
-          <button type="button" class="btn btn-primary" data-dismiss="alert" aria-label="Close"
-                  onclick="showAlert('info','alert text')">
-            <span aria-hidden="true">Show alert</span>
-          </button>
-          <script>
-            function showAlert(type, text) {
-              let alert = buildAlert(type, text);
-              let body = document.body;
-              body.appendChild(alert);
-              console.log(alert);
-            }
 
-            function buildAlert(type, text) {
-              let alertContainer = document.createElement('div')
-              alertContainer.className = 'alert alert-' + type + ' fade show';
-              alertContainer.role = 'alert'
-              alertContainer.id = type + 'Alert';
-              let alertMess = document.createElement('span');
-              alertMess.innerText = text;
-              alertContainer.appendChild(alertMess);
-              let alertClose = document.createElement('button');
-              alertClose.className = 'close';
-              alertClose.type = 'button';
-              alertClose.innerText = '×';
-              alertContainer.appendChild(alertClose);
-              return alertContainer;
-            }
-
-
-          </script>
-        </div>
         <div class="col mt-3">
           <div class="ticket-set">
             <div class="ticket" style=";position:relative;">
