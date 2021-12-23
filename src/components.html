@@ -91,7 +91,6 @@
       </div>
       <div class="col-2 mt-2 mb-2">
         <button type="button" class="btn btn-primary btn-round">?</button>
-
       </div>
       <div class="col-3 mt-2 mb-2">
         <button type="button" class="btn btn-primary">
@@ -102,12 +101,20 @@
     </div>
   </div>
   <div class="container-fluid mt-2 mb-2">
-    <div class="row">
-    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('danger', 'danger')">Show alert danger</button></div>
-    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('success', 'success')">Show alert success</button></div>
-    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('warning', 'warning')">Show alert warning</button></div>
-    <div class="col-3"><button class="btn btn-secondary" onclick="showAlert('info', 'info')">Show alert info</button></div>
-    </div>
+<!--    <div class="row">-->
+<!--      <div class="col-3">-->
+<!--        <button class="btn btn-secondary" onclick="showAlert('danger', 'danger')">Show alert danger</button>-->
+<!--      </div>-->
+<!--      <div class="col-3">-->
+<!--        <button class="btn btn-secondary" onclick="showAlert('success', 'success')">Show alert success</button>-->
+<!--      </div>-->
+<!--      <div class="col-3">-->
+<!--        <button class="btn btn-secondary" onclick="showAlert('warning', 'warning')">Show alert warning</button>-->
+<!--      </div>-->
+<!--      <div class="col-3">-->
+<!--        <button class="btn btn-secondary" onclick="showAlert('info', 'info')">Show alert info</button>-->
+<!--      </div>-->
+<!--    </div>-->
     <script>
       function showAlert(type, text) {
         let alert = buildAlert(type, text);
@@ -119,7 +126,7 @@
       }
 
       function buildAlert(type, text) {
-        let alertContainer = document.createElement('div')
+        let alertContainer = document.createElement('div');
         alertContainer.className = 'alert alert-' + type + ' fade show';
         alertContainer.role = 'alert';
         alertContainer.id = type + 'Alert';
@@ -144,7 +151,7 @@
         <div class="col">
           <div class="form-group mb-3">
             <label for="authEmailInput1">Email</label>
-            <input type="email" class="form-control" id="authEmailInput1" name="email" value="user@user.ru" validate=""
+            <input type="email" class="form-control" id="authEmailInput1" name="email" value="user@user.ru"
                    data-validator="email">
           </div>
         </div>
@@ -152,13 +159,13 @@
           <div class="form-group mb-3">
             <label for="authEmailInput">Email</label>
             <input disabled type="email" class="form-control" id="authEmailInput" name="email" value="user@user.ru"
-                   validate="" data-validator="email">
+                   data-validator="email">
           </div>
         </div>
         <div class="col">
           <div class="form-group mb-3">
             <label for="basic-url4">Label</label>
-            <input type="text" class="form-control error" id="basic-url4" aria-describedby="basic-addon3" value="Text">
+            <input type="text" class="form-control error" id="basic-url4" value="Text">
             <small id="regLastNameHelp" class="form-text text-muted">
               Поле может содержать только кириллические символы
             </small>
@@ -167,22 +174,22 @@
         <div class="col">
           <div class="form-group label-side mb-3">
             <label for="authEmailInput4">side</label>
-            <input type="email" class="form-control" id="authEmailInput4" name="email" value="user@user.ru" validate=""
+            <input type="email" class="form-control" id="authEmailInput4" name="email" value="user@user.ru"
                    data-validator="email">
           </div>
         </div>
         <div class="col">
           <div class="form-group label-side label-top-mobile mb-3">
             <label for="authEmailInput5">to top</label>
-            <input type="email" class="form-control" id="authEmailInput5" name="email" value="user@user.ru" validate=""
+            <input type="email" class="form-control" id="authEmailInput5" name="email" value="user@user.ru"
                    data-validator="email">
           </div>
         </div>
         <div class="col">
           <div class="form-group">
-            <input type="date" id="toInput" name="to"
-                   class="form-control date-picker" value="01.08.2021"
-                   placeholder="01.08.2021">
+            <input type="text" id="datePicker" class="form-control date-picker" value="23.12.2021"
+                   placeholder="23.12.2021">
+            <label for="datePicker"></label>  <!-- calendar label -->
           </div>
         </div>
         <div class="col mb-3">
@@ -191,7 +198,7 @@
               <input type="checkbox" class="custom-control-input" id="customSwitch3">
               <label class="custom-control-label" for="customSwitch3">Снять с охраны</label>
             </div>
-            <a class="stretched-link group-card-description" href="./?/?group=4176">
+            <a class="stretched-link group-card-description" href="">
               <div class="card-name">23121323</div>
               <div class="card-subtitle">N устройств</div>
             </a>
@@ -199,7 +206,7 @@
         </div>
         <div class="col mb-3">
           <div class="group-card">
-            <a class="stretched-link group-card-description" href="./?/?group=4176">
+            <a class="stretched-link group-card-description" href="">
               <div class="card-name">loooooooooooooooooooooooooooooooooong</div>
             </a>
           </div>
@@ -232,8 +239,8 @@
             <button type="button" class="close" data-dismiss="alert">×</button>
           </div>
         </div>
-        <div class="col">
-          <div class="ticket" style="cursor: pointer; width: 327px">
+        <div class="col" style="min-width:380px;">
+          <div class="ticket" style="cursor: pointer;">
             <div class="ticket-body">
               <span class="ticket-title">abc+ds@email.com</span>
               <div class="ticket-item">
@@ -250,11 +257,11 @@
               </div>
             </div>
             <div class="ticket-transition">
-              >
+              <img src="./decstream_cp/public/images/arrow-forth.svg">
             </div>
           </div>
           <div class="ticket data-state data-state-MISSING" onclick="editInvite('abc+ds@email.com', 10, 'MANAGER');"
-               style="cursor: pointer; width: 327px">
+               style="cursor: pointer">
             <div class="ticket-body">
               <span class="ticket-title">abc+ds@email.com</span>
               <div class="ticket-item">
@@ -271,10 +278,10 @@
               </div>
             </div>
             <div class="ticket-transition">
-              >
+              <img src="./decstream_cp/public/images/arrow-forth.svg">
             </div>
           </div>
-          <div class="ticket data-state data-state-DELAY" onclick="location.href='./?/organization/groups/?group=4176'"
+          <div class="ticket data-state data-state-DELAY" onclick="location.href=''"
                style="cursor:pointer;">
             <div class="ticket-body">
               <div class="ticket-title-block">
@@ -287,7 +294,7 @@
             </div>
           </div>
           <div class="ticket data-state data-state-ERROR" onclick="editInvite('abc+ds@email.com', 10, 'MANAGER');"
-               style="cursor: pointer; width: 327px">
+               style="cursor: pointer;">
             <div class="ticket-body">
               <span class="ticket-title">abc+ds@email.com</span>
               <div class="ticket-item">
@@ -304,7 +311,7 @@
               </div>
             </div>
             <div class="ticket-transition">
-              >
+              <img src="./decstream_cp/public/images/arrow-forth.svg">
             </div>
           </div>
         </div>
@@ -414,10 +421,9 @@
             </ul>
           </nav>
         </div>
-
         <div class="col mt-3">
           <div class="ticket-set">
-            <div class="ticket" style=";position:relative;">
+            <div class="ticket" style="position:relative;">
               <div class="ticket-body" style="gap: 8px;">
                 <span class="ticket-title">10.16.76.2, Firefox (unknown)</span>
                 <div class="ticket-item w-100">
@@ -430,7 +436,7 @@
                   <span class="ticket-item-title">14:39:38</span>
                 </div>
               </div>
-              <button class="ticket-btn" onclick="deleteSession('96dde37a-8ebd-48fe-b454-fd2f65ba0242')">
+              <button class="ticket-btn" onclick="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <g fill="none" fill-rule="evenodd">
                     <path d="M0 0L24 0 24 24 0 24z"
@@ -442,7 +448,7 @@
                 </svg>
               </button>
             </div>
-            <div class="ticket" style=";position:relative;">
+            <div class="ticket" style="position:relative;">
               <div class="ticket-body" style="gap: 8px;">
                 <span class="ticket-title">10.16.76.2, Firefox (unknown)</span>
                 <div class="ticket-item w-100">
@@ -455,7 +461,7 @@
                   <span class="ticket-item-title">14:39:38</span>
                 </div>
               </div>
-              <button class="ticket-btn" onclick="deleteSession('96dde37a-8ebd-48fe-b454-fd2f65ba0242')">
+              <button class="ticket-btn" onclick="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <g fill="none" fill-rule="evenodd">
                     <path d="M0 0L24 0 24 24 0 24z"
@@ -467,7 +473,7 @@
                 </svg>
               </button>
             </div>
-            <div class="ticket" style=";position:relative;">
+            <div class="ticket" style="position:relative;">
               <div class="ticket-body" style="gap: 8px;">
                 <span class="ticket-title">10.16.76.2, Firefox (unknown)</span>
                 <div class="ticket-item w-100">
@@ -480,7 +486,7 @@
                   <span class="ticket-item-title">14:39:38</span>
                 </div>
               </div>
-              <button class="ticket-btn" onclick="deleteSession('96dde37a-8ebd-48fe-b454-fd2f65ba0242')">
+              <button class="ticket-btn" onclick="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <g fill="none" fill-rule="evenodd">
                     <path d="M0 0L24 0 24 24 0 24z"
@@ -501,7 +507,7 @@
     <div class="row">
       <div class="col-3">
         <div class="meter-card data-state data-state-NORMAL">
-          <a class="stretched-link" href="./?/?graph=4718">
+          <a class="stretched-link" href="">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
                  fill="#5E79AA">
               <path
@@ -525,7 +531,7 @@
       </div>
       <div class="col-3">
         <div class="meter-card data-state data-state-MISSING">
-          <a class="stretched-link" href="./?/?graph=4718">
+          <a class="stretched-link" href="">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
                  fill="#5E79AA">
               <path
@@ -549,7 +555,7 @@
       </div>
       <div class="col-3">
         <div class="meter-card data-state data-state-DELAY">
-          <a class="stretched-link" href="./?/?graph=4718">
+          <a class="stretched-link" href="">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
                  fill="#5E79AA">
               <path
@@ -573,7 +579,7 @@
       </div>
       <div class="col-3">
         <div class="meter-card data-state data-state-ERROR">
-          <a class="stretched-link" href="./?/?graph=4718">
+          <a class="stretched-link" href="">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" class="meter-card-type"
                  fill="#5E79AA">
               <path
@@ -604,13 +610,12 @@
               <th class="border-0">Выдано</th>
               <th class="border-0">Роль</th>
               <th class="border-0"></th>
-
             </tr>
             </thead>
             <tbody>
-            <tr onclick="editInvite('abcabcabc+6@gmail.com', 234, 'MANAGER');" style="cursor:pointer;">
+            <tr onclick="editInvite();" style="cursor:pointer;">
               <td class="usermobtable1 nowrap">
-                <div class="string-fixwidth">
+                <div class="string-fixwidth"> <!-- this class for calls where long strings are expected -->
                   abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc+6@gmail.com
                 </div>
               </td>
@@ -619,14 +624,14 @@
               <td class="usermobtable2">Менеджер</td>
               <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
             </tr>
-            <tr onclick="editInvite('abcabcabc+5@gmail.com', 233, 'MANAGER');" style="cursor:pointer;">
+            <tr onclick="editInvite();" style="cursor:pointer;">
               <td class="usermobtable1 nowrap">abcabcabc+5@gmail.com</td>
               <td class="usermobtable2">Устарело</td>
               <td class="usermobtable3">14-12-2020 15:11:13</td>
               <td class="usermobtable2">Менеджер</td>
               <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
             </tr>
-            <tr class="hover-element" onclick="editInvite('abcabcabc+4@gmail.com', 232, 'MANAGER');">
+            <tr class="hover-element" onclick="editInvite();">
               <td class="usermobtable1 nowrap">hover me</td>
               <td class="usermobtable2">Устарело</td>
               <td class="usermobtable3">14-12-2020 15:01:32</td>
@@ -719,8 +724,8 @@
           <!--            </div>-->
           <!--          </div>-->
           <!--        </div>-->
-          <div id="groupParentsTree">
-          </div>
+<!--          <div id="groupParentsTree">-->
+<!--          </div>-->
           <script>
             let _parentsArray = {
               "address": {
@@ -964,13 +969,10 @@
                 </div>
                 <ul class="list-group">
                   <li class="list-group-item "><a href="./?/devices/groups/?organization=10">
-
                     Личная
-
                   </a>
                   </li>
                   <li class="list-group-item "><a href="./?/devices/groups/?organization=3">
-
                     Хорошая
                     <br><small>Владелец</small>
                   </a>
@@ -982,25 +984,21 @@
                   </a>
                   </li>
                   <li class="list-group-item "><a href="./?/devices/groups/?organization=310">
-
                     Томика23
                     <br><small>Владелец</small>
                   </a>
                   </li>
                   <li class="list-group-item "><a href="./?/devices/groups/?organization=1184">
-
                     Тест 404 не трогать
                     <br><small>Владелец</small>
                   </a>
                   </li>
                   <li class="list-group-item "><a href="./?/devices/groups/?organization=261">
-
                     ООО "Декстрим компани"
                     <br><small>Владелец</small>
                   </a>
                   </li>
                   <li class="list-group-item "><a href="./?/devices/groups/?organization=262">
-
                     Org u
                     <br><small>Владелец</small>
                   </a>
@@ -1050,14 +1048,11 @@
               <td></td>
               <td class="pl-0"><img src="src/images/arrow-forth.svg"></td>
             </tr>
-            <tr data-role="link" data-href="./?/devices/info/?id=625" class="data-state data-state-ERROR" style="cursor: pointer;">
+            <tr data-role="link" data-href="./?/devices/info/?id=625" class="data-state data-state-ERROR"
+                style="cursor: pointer;">
               <td>
                 <span class="mask2line bg-success"></span>
-                <span>
-            	                        <img class="deviceIcon"
-                                           src="src/images/bulb.svg">
-
-            	                    </span>
+                <span><img class="deviceIcon" src="src/images/bulb.svg"></span>
               </td>
               <td>Водосчётчик (Вега СИ-12 6)</td>
               <td>
@@ -1071,11 +1066,7 @@
             <tr data-role="link" data-href="./?/devices/info/?id=1003" style="cursor: pointer;">
               <td>
                 <span class="mask2line bg-success"></span>
-                <span>
-            	                        <img class="deviceIcon"
-                                           src="src/images/bulb.svg">
-
-            	                    </span>
+                <span><img class="deviceIcon" src="src/images/bulb.svg"></span>
               </td>
               <td>Влажность (Дебаг) 1</td>
               <td>
@@ -1112,7 +1103,7 @@
                   <input type="text" id="addOrgId" class="form-control" value="">
                 </div>
                 <div class="form-group">
-                  <select class="form-control" id="addVirtualDevicePurposeSelect">
+                  <select class="form-control" id="addVirtualDevicePurposeSelect1">
                     <option value="NONE">Не задано</option>
                     <option value="COLD_WATER">Холодная вода</option>
                     <option value="HOT_WATER">Горячая вода</option>
